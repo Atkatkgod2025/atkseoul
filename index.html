@@ -331,7 +331,23 @@
             cursor: pointer;
         }
 
-        /* 天氣 Tab 專屬樣式 */
+        /* 天氣 Tab 實時樣式 */
+        .weather-current-card {
+            background: linear-gradient(135deg, #EEF4F3 0%, #E2EFF0 100%);
+            border: 2px solid var(--mizu-blue);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .weather-current-temp {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--ink-black);
+            line-height: 1.1;
+        }
+
         .weather-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -340,11 +356,12 @@
         }
 
         .weather-card {
-            background: var(--mizu-soft);
-            border: 2px solid var(--mizu-blue);
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 10px;
             text-align: center;
+            box-shadow: 2px 2px 0px var(--border-color);
         }
 
         .weather-date {
@@ -354,7 +371,7 @@
         }
 
         .weather-temp {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 900;
             margin: 4px 0;
             color: var(--ink-black);
@@ -400,7 +417,7 @@
         <div class="traveler-selector">
             <button class="tab-btn active" id="btn-oscar" onclick="switchTab('oscar')">Oscar (11/1-11/4)</button>
             <button class="tab-btn" id="btn-mum" onclick="switchTab('mum')">Nic & Mum (11/1-11/7)</button>
-            <button class="tab-btn" id="btn-weather" onclick="switchTab('weather')">☀️ 11月天氣</button>
+            <button class="tab-btn" id="btn-weather" onclick="switchTab('weather')">☀️ 實時氣候</button>
         </div>
     </header>
 
@@ -453,58 +470,27 @@
         </div>
     </div>
 
-    <!-- 天氣預報頁面 (Weather View) -->
+    <!-- 自動 API 抓取之實時天氣頁面 -->
     <div id="weather-view" style="display: none;">
-        <div class="info-card">
-            <div class="card-header">
-                <span>🍁 首爾 11月初氣候概況</span>
-                <span class="hotel-tag">秋末偏冷</span>
-            </div>
-            <div style="font-size: 0.82rem; color: #444; line-height: 1.6;">
-                <b>🌡️ 平均氣溫：</b> $5^\circ\text{C} \sim 15^\circ\text{C}$<br>
-                <b>🧥 建議穿搭：</b> 採「洋葱式穿法」。早晚溫差大且風大，建議保暖底衫 + 衛衣/針織衫 + 防風外套或輕量羽絨。室內與地鐵皆有暖氣。
-            </div>
+        <div class="weather-current-card">
+            <div style="font-size: 0.8rem; font-weight: 800; color: var(--mizu-blue);">🇰🇷 首爾即時氣溫 (API 自動更新)</div>
+            <div class="weather-current-temp" id="api-current-temp">--°C</div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #555;" id="api-current-status">🔄 正在同步最新天文台氣候...</div>
         </div>
 
         <div class="info-card">
             <div class="card-header">
-                <span>📅 11/1 – 11/7 天氣預測</span>
+                <span>📅 首爾未來 7 天最新動態預測</span>
+                <span class="hotel-tag">即時同步</span>
             </div>
-            <div class="weather-grid">
-                <div class="weather-card">
-                    <div class="weather-date">11/1 (日)</div>
-                    <div class="weather-temp">7° / 16°</div>
-                    <div class="weather-desc">🌤️ 晴時多雲</div>
-                </div>
-                <div class="weather-card">
-                    <div class="weather-date">11/2 (一) 🍁</div>
-                    <div class="weather-temp">6° / 15°</div>
-                    <div class="weather-desc">☀️ 晴朗賞楓好天氣</div>
-                </div>
-                <div class="weather-card">
-                    <div class="weather-date">11/3 (二)</div>
-                    <div class="weather-temp">5° / 14°</div>
-                    <div class="weather-desc">⛅ 多雲</div>
-                </div>
-                <div class="weather-card">
-                    <div class="weather-date">11/4 (三)</div>
-                    <div class="weather-temp">4° / 13°</div>
-                    <div class="weather-desc">🌤️ 晴朗偏冷</div>
-                </div>
-                <div class="weather-card">
-                    <div class="weather-date">11/5 (四)</div>
-                    <div class="weather-temp">5° / 14°</div>
-                    <div class="weather-desc">☀️ 晴朗</div>
-                </div>
-                <div class="weather-card">
-                    <div class="weather-date">11/6 (五)</div>
-                    <div class="weather-temp">3° / 12°</div>
-                    <div class="weather-desc">⛅ 多雲偏冷</div>
+            <div class="weather-grid" id="api-forecast-grid">
+                <div style="grid-column: span 2; text-align: center; padding: 20px; font-size: 0.85rem; color: #888;">
+                    ⏳ 正在載入首爾最新天氣預報...
                 </div>
             </div>
 
             <a href="https://m.search.naver.com/search.naver?query=%EC%84%9C%EC%9A%B8+%EB%82%A0%EC%94%A1" target="_blank" class="external-link-btn">
-                🔍 點此開啟 Naver 首爾即時天氣預報
+                🔍 點此開啟 Naver 官方詳細天氣預報
             </a>
         </div>
     </div>
@@ -654,6 +640,7 @@
             if (tab === 'weather') {
                 mainView.style.display = 'none';
                 weatherView.style.display = 'block';
+                fetchLiveSeoulWeather();
             } else {
                 mainView.style.display = 'block';
                 weatherView.style.display = 'none';
@@ -754,6 +741,58 @@
             saveTimer = setTimeout(() => {
                 indicator.classList.remove('show');
             }, 1500);
+        }
+
+        // 🌟 自動抓取 Open-Meteo 氣象 API (首爾經緯度: 37.5665, 126.9780)
+        function fetchLiveSeoulWeather() {
+            const url = 'https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode&timezone=Asia%2FTokyo';
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // 更新當前實時溫度
+                    const currentTemp = Math.round(data.current_weather.temperature);
+                    document.getElementById('api-current-temp').innerText = `${currentTemp}°C`;
+                    document.getElementById('api-current-status').innerText = `風速: ${data.current_weather.windspeed} km/h · 氣候狀態: ${getWeatherDesc(data.current_weather.weathercode).label}`;
+
+                    // 渲染未來 7 天預報
+                    const grid = document.getElementById('api-forecast-grid');
+                    grid.innerHTML = '';
+
+                    const daily = data.daily;
+                    for (let i = 0; i < daily.time.length; i++) {
+                        const dateStr = daily.time[i].substring(5).replace('-', '/');
+                        const maxTemp = Math.round(daily.temperature_2m_max[i]);
+                        const minTemp = Math.round(daily.temperature_2m_min[i]);
+                        const pop = daily.precipitation_probability_max[i] || 0;
+                        const weatherInfo = getWeatherDesc(daily.weathercode[i]);
+
+                        const card = document.createElement('div');
+                        card.className = 'weather-card';
+                        card.innerHTML = `
+                            <div class="weather-date">${dateStr}</div>
+                            <div class="weather-temp">${minTemp}° / ${maxTemp}°</div>
+                            <div class="weather-desc">${weatherInfo.icon} ${weatherInfo.label}</div>
+                            <div style="font-size:0.7rem; color:#888; margin-top:2px;">💧 降雨率 ${pop}%</div>
+                        `;
+                        grid.appendChild(card);
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('api-current-status').innerText = '⚠️ 暫時無法連線至氣象 API，請稍後再試。';
+                });
+        }
+
+        // 天氣代碼對照表
+        function getWeatherDesc(code) {
+            if (code === 0) return { icon: '☀️', label: '晴朗' };
+            if (code === 1 || code === 2) return { icon: '🌤️', label: '多雲時晴' };
+            if (code === 3) return { icon: '☁️', label: '陰天' };
+            if (code >= 45 && code <= 48) return { icon: '🌫️', label: '有霧' };
+            if (code >= 51 && code <= 67) return { icon: '🌧️', label: '有雨' };
+            if (code >= 71 && code <= 77) return { icon: '❄️', label: '降雪' };
+            if (code >= 80 && code <= 82) return { icon: '🌦️', label: '陣雨' };
+            return { icon: '🌤️', label: '良好' };
         }
 
         initApp();
