@@ -266,6 +266,18 @@
             font-weight: 700;
         }
 
+        .transport-tag {
+            display: inline-block;
+            background: #F0F4F8;
+            color: #2B5B84;
+            border: 1px solid #B0C4DE;
+            border-radius: 6px;
+            padding: 2px 6px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
         .remarks-section {
             margin-top: 16px;
             background: var(--yamabuki-soft);
@@ -331,7 +343,6 @@
             cursor: pointer;
         }
 
-        /* 天氣 Tab 實時樣式 */
         .weather-current-card {
             background: linear-gradient(135deg, #EEF4F3 0%, #E2EFF0 100%);
             border: 2px solid var(--mizu-blue);
@@ -463,9 +474,9 @@
             <div id="checklist-container">
                 <div class="checklist-item"><input type="checkbox" id="c1"><label for="c1">和談林楓葉門票 (預先確認 QR)</label></div>
                 <div class="checklist-item"><input type="checkbox" id="c2"><label for="c2">韓國傳統棉被 (廣藏市場 88號店)</label></div>
-                <div class="checklist-item"><input type="checkbox" id="c3"><label for="c3">Olive Young 護膚品 & 保濕面膜</label></div>
-                <div class="checklist-item"><input type="checkbox" id="c4"><label for="c4">Daiso 弘大/明洞大樓採購小工具</label></div>
-                <div class="checklist-item"><input type="checkbox" id="c5"><label for="c5">東大門 DDP 現代 Outlet 逛街</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c3"><label for="c3">Pola at home 韓系質感餐具選購</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c4"><label for="c4">Folnua 聖水洞人氣設計師包款</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c5"><label for="c5">60雞外賣辣椒炸雞 (Gochu Chicken)</label></div>
             </div>
         </div>
     </div>
@@ -511,32 +522,35 @@
                     {
                         dayNum: 1,
                         date: "11月1日 (日)",
-                        title: "抵達首爾 & 明洞夜市",
+                        title: "抵達首爾 & 우주집 美食宵夜",
                         items: [
-                            { time: "17:55", title: "抵達仁川國際機場 (ICN)", desc: "乘搭 HX622 抵達，辦理入境手續、取行李。" },
-                            { time: "19:00", title: "乘搭 AREX 直通列車", desc: "往首爾站，轉乘地鐵至 Layer Hostel Check-in。" },
-                            { time: "20:30", title: "明洞商圈 & 晚宵夜", desc: "逛明洞小吃街，吃韓式炸雞或神仙雪濃湯。" }
+                            { time: "17:55", title: "抵達仁川國際機場 (ICN)", desc: "乘搭 HX622 抵達，辦理入境手續與提取行李。" },
+                            { time: "19:00", title: "前往 Layer Hostel Check-in", desc: "乘搭 AREX 直通列車至首爾站，轉乘地鐵前往 Layer Hostel。", transport: "🚇 地鐵 4號線 明洞站 8號出口 步行約 5 分鐘" },
+                            { time: "20:30", title: "🍽️ 우주집 (Woojujip) 韓式烤肉晚宴", desc: "首爾極具人氣的韓式烤肉與烤牛小腸名店，好好大吃一頓慶祝抵達首爾！", transport: "📍 鄰近明洞/市廳商圈，步行或搭地鐵 1 站即達" }
                         ]
                     },
                     {
                         dayNum: 2,
                         date: "11月2日 (一)",
-                        title: "🍁 和談林秋日賞楓專屬日",
+                        title: "🍁 和談林賞楓 & 60雞宵夜",
                         items: [
-                            { time: "07:30", title: "明洞出發前往和談林", desc: "乘搭地鐵至昆池岩站，轉乘特約的士/巴士抵達和談林入口。", highlight: "⚠️ 提早預備 QR Code 門票入場！" },
-                            { time: "09:30", title: "和談林 (Hwadam Botanic Garden) 賞楓", desc: "乘搭單軌列車觀賞滿山紅葉，漫步楓葉木棧道公園。" },
-                            { time: "14:00", title: "返回首爾市區 & 廣藏市場", desc: "品嚐綠豆餅、生牛肉、生章魚，前往 88 號店挑選韓國傳統棉被。" },
-                            { time: "18:00", title: "東大門 DDP & 現代 Outlet", desc: "晚上逛 DDP 建築夜景與東大門周邊商圈。" }
+                            { time: "07:30", title: "出發前往昆池岩和談林", desc: "搭乘地鐵至昆池岩站，轉乘特約的士或巴士前往和談林入口。", highlight: "⚠️ 預先準備好 QR Code 門票入場！" },
+                            { time: "09:30", title: "和談林 (Hwadam Botanic Garden) 賞楓", desc: "搭乘單軌列車觀賞滿山楓紅與木棧道公園。" },
+                            { time: "14:00", title: "廣藏市場傳統美食", desc: "品嚐綠豆餅、生牛肉、生章魚，挑選傳統棉被。" },
+                            { time: "18:00", title: "東大門 DDP & 現代 Outlet", desc: "夜晚漫步 DDP 建築夜景與周邊購物商圈。" },
+                            { time: "21:30", title: "🍗 60雞炸雞 (60계치킨) 外賣宵夜", desc: "外賣韓國超火爆「每日換新油炸60隻」的 60雞炸雞！推薦招牌辣椒炸雞 (Gochu Chicken)，回酒店配啤酒享用。", transport: "🛵 可透過 Baedal/Coupang Eats 外賣送到酒店或外帶" }
                         ]
                     },
                     {
                         dayNum: 3,
                         date: "11月3日 (二)",
-                        title: "弘大購物 & Daiso 採購",
+                        title: "聖水洞購物 (Folnua + Pola at home)",
                         items: [
-                            { time: "10:00", title: "弘大入口商圈逛街", desc: "逛美妝店、潮流服飾店與質感 Cafe 享用 Brunch。" },
-                            { time: "14:00", title: "Daiso 大樓 & Olive Young 補貨", desc: "大採購生活小物與護膚保養品。" },
-                            { time: "18:00", title: "前往仁川機場 & 返港", desc: "乘搭 AREX 前往機場，乘搭 HX625 (23:05) 返回香港。" }
+                            { time: "10:30", title: "🛍️ Pola at home (폴라아ット홈) 家品雜貨", desc: "聖水洞極具質感的韓系陶瓷餐具、碗盤與居家生活選品店。", transport: "🚇 2號線 聖水站 (성수역) 3號出口 步行約 8 分鐘" },
+                            { time: "12:00", title: "聖水洞 Cafe & Brunch", desc: "在聖水洞工業風咖啡廳享用早午餐與精品咖啡。" },
+                            { time: "13:30", title: "🛍️ Folnua (폴느아) 聖水旗艦店", desc: "韓國超夯設計師皮革包款與時尚服飾選品店，質感絕佳！", transport: "🚇 聖水洞商圈內，步行約 5 分鐘即可抵達" },
+                            { time: "16:00", title: "Daiso 大樓 & Olive Young 補貨", desc: "回市區進行最後的美妝與生活小物採購。" },
+                            { time: "18:00", title: "前往仁川機場 & 返港", desc: "乘搭 AREX 直通列車前往機場，搭乘 HX625 (23:05) 返港。" }
                         ]
                     }
                 ]
@@ -551,29 +565,31 @@
                     {
                         dayNum: 1,
                         date: "11月1日 (日)",
-                        title: "抵達首爾 & 東大門夜遊",
+                        title: "抵達首爾 & 우주집 烤肉美食",
                         items: [
                             { time: "17:55", title: "抵達仁川國際機場 (ICN)", desc: "乘搭 HX622 抵達，辦理入境與拿行李。" },
                             { time: "19:30", title: "入住首爾東大門美居大使酒店", desc: "乘搭機場巴士 6001 或 AREX 抵達酒店 Check-in。" },
-                            { time: "20:30", title: "東大門美食街", desc: "享用陳玉華一隻雞或東大門烤肉。" }
+                            { time: "20:30", title: "🍽️ 우주집 (Woojujip) 韓式烤肉", desc: "美味韓式烤肉晚宴，開啟韓國秋日漫遊之旅！", transport: "🚇 地鐵 1/4號線 東大門站 鄰近" }
                         ]
                     },
                     {
                         dayNum: 2,
                         date: "11月2日 (一)",
-                        title: "🍁 和談林賞楓 & 廣藏市場",
+                        title: "🍁 和談林賞楓 & 60雞宵夜",
                         items: [
                             { time: "07:30", title: "前往和談林賞楓", desc: "一同前往昆池岩和談林欣賞滿山紅葉景致。" },
-                            { time: "14:00", title: "廣藏市場體驗", desc: "逛傳統市場、食綠豆餅、選購韓國優質傳統棉被。" }
+                            { time: "14:00", title: "廣藏市場體驗", desc: "逛傳統市場、食綠豆餅、選購韓國優質傳統棉被。" },
+                            { time: "21:00", title: "🍗 60雞炸雞 (60계치킨) 宵夜", desc: "外賣品嚐每日新油炸的 60雞招牌辣椒炸雞，非常解饞！" }
                         ]
                     },
                     {
                         dayNum: 3,
                         date: "11月3日 (二)",
-                        title: "弘大逛街 & Daiso 購物",
+                        title: "聖水洞質感購物 (Pola at home + Folnua)",
                         items: [
-                            { time: "10:30", title: "弘大商圈漫步", desc: "逛精美小店、享用精緻下午茶。" },
-                            { time: "15:00", title: "Daiso & Olive Young 旗艦店", desc: "慢慢挑選生活用品與補貨保養品。" }
+                            { time: "10:30", title: "🛍️ Pola at home 質感家品", desc: "選購超可愛的韓系陶瓷餐具與生活雜貨。", transport: "🚇 2號線 聖水站 3號出口" },
+                            { time: "13:00", title: "🛍️ Folnua 聖水旗艦店包款", desc: "試背選購韓國熱門設計師品牌皮革包包與質感單品。" },
+                            { time: "16:00", title: "Daiso & Olive Young 旗艦店", desc: "慢慢挑選生活用品與補貨保養品。" }
                         ]
                     },
                     {
@@ -701,6 +717,7 @@
                     <span class="time-badge">⏰ ${item.time}</span>
                     <div class="item-title">${item.title}</div>
                     <div class="item-desc">${item.desc}</div>
+                    ${item.transport ? `<div class="transport-tag">${item.transport}</div>` : ''}
                     ${item.highlight ? `<div class="highlight-box">${item.highlight}</div>` : ''}
                 `;
                 container.appendChild(itemEl);
