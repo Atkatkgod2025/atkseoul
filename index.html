@@ -44,7 +44,6 @@
             background-size: 16px 16px;
         }
 
-        /* 頂部標題與成員切換按鈕 */
         header {
             text-align: center;
             margin-bottom: 16px;
@@ -73,7 +72,6 @@
             font-weight: 700;
         }
 
-        /* 切換人選 Tabs */
         .traveler-selector {
             display: flex;
             background: #EFECE6;
@@ -89,7 +87,7 @@
             padding: 8px 4px;
             border: none;
             border-radius: 10px;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -104,7 +102,6 @@
             border: 2px solid var(--border-color);
         }
 
-        /* 天數分頁導航 */
         .day-nav {
             display: flex;
             gap: 6px;
@@ -140,7 +137,6 @@
             box-shadow: 2px 4px 0px var(--border-color);
         }
 
-        /* 資訊卡片 */
         .info-card {
             background: var(--card-bg);
             border: 3px solid var(--border-color);
@@ -181,7 +177,6 @@
             border: 1px solid var(--coral-red);
         }
 
-        /* 複製地址專用按鈕 */
         .copy-btn {
             display: inline-flex;
             align-items: center;
@@ -197,11 +192,6 @@
             color: var(--ink-black);
         }
 
-        .copy-btn:active {
-            background: #DDD;
-        }
-
-        /* 行程時間軸 */
         .timeline {
             position: relative;
             padding-left: 20px;
@@ -276,7 +266,6 @@
             font-weight: 700;
         }
 
-        /* 隨手筆記/備忘格 (Interactive Remarks Box) */
         .remarks-section {
             margin-top: 16px;
             background: var(--yamabuki-soft);
@@ -321,11 +310,6 @@
             outline: none;
         }
 
-        .remarks-textarea:focus {
-            border-color: var(--coral-red);
-        }
-
-        /* 購物 CheckList */
         .checklist-item {
             display: flex;
             align-items: center;
@@ -347,7 +331,57 @@
             cursor: pointer;
         }
 
-        /* 底部註腳 */
+        /* 天氣 Tab 專屬樣式 */
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .weather-card {
+            background: var(--mizu-soft);
+            border: 2px solid var(--mizu-blue);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .weather-date {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--mizu-blue);
+        }
+
+        .weather-temp {
+            font-size: 1.1rem;
+            font-weight: 900;
+            margin: 4px 0;
+            color: var(--ink-black);
+        }
+
+        .weather-desc {
+            font-size: 0.75rem;
+            color: #555;
+            font-weight: 700;
+        }
+
+        .external-link-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background: var(--yamabuki-yellow);
+            color: white;
+            font-weight: 800;
+            font-size: 0.85rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            text-decoration: none;
+            box-shadow: 2px 2px 0px var(--border-color);
+            margin-top: 12px;
+        }
+
         footer {
             text-align: center;
             font-size: 0.72rem;
@@ -359,69 +393,119 @@
 </head>
 <body>
 
-    <!-- 標題與成員切換 -->
     <header>
         <div class="header-title">🍁 首爾秋日賞楓之旅 2026</div>
         <div class="header-subtitle" id="trip-dates-subtitle">2026.11.01 – 2026.11.04 (3日2夜快閃)</div>
         
         <div class="traveler-selector">
-            <button class="tab-btn active" id="btn-oscar" onclick="switchTraveler('oscar')">Oscar (11/1-11/4 快閃)</button>
-            <button class="tab-btn" id="btn-mum" onclick="switchTraveler('mum')">Nic & Mum (11/1-11/7 漫遊)</button>
+            <button class="tab-btn active" id="btn-oscar" onclick="switchTab('oscar')">Oscar (11/1-11/4)</button>
+            <button class="tab-btn" id="btn-mum" onclick="switchTab('mum')">Nic & Mum (11/1-11/7)</button>
+            <button class="tab-btn" id="btn-weather" onclick="switchTab('weather')">☀️ 11月天氣</button>
         </div>
     </header>
 
-    <!-- 天數導航 -->
-    <div class="day-nav" id="day-nav-container">
-        <!-- JS 自動產生 Day 按鈕 -->
-    </div>
+    <!-- 行程頁面主體 (Oscar / Mum) -->
+    <div id="main-itinerary-view">
+        <div class="day-nav" id="day-nav-container"></div>
 
-    <!-- 酒店與航班概覽 -->
-    <div class="info-card">
-        <div class="card-header">
-            <span>🏨 住宿與航班資訊</span>
-            <span class="flight-badge" id="flight-badge-info">HX622 / HX625</span>
-        </div>
-        <div style="font-size: 0.85rem; font-weight: 800;" id="hotel-name-cn">🏨 明洞相鐵 FRESA INN</div>
-        <div style="font-size: 0.75rem; color: #666;" id="hotel-name-en">Sotetsu Fresa Inn Seoul Myeongdong</div>
-        <div style="font-size: 0.75rem; color: #888; margin-top: 2px;" id="hotel-address-kr">서울특별시 중구 明洞9길 36</div>
-        
-        <button class="copy-btn" onclick="copyHotelAddress()">
-            📋 複製酒店韓文地址 (給司機/Naver Map)
-        </button>
-    </div>
-
-    <!-- 每日行程時間軸 -->
-    <div class="info-card">
-        <div class="card-header">
-            <span id="current-day-title">📅 DAY 1 · 11月1日 (日)</span>
-            <span class="hotel-tag" id="current-day-tag">抵達首爾 & 明洞夜市</span>
-        </div>
-
-        <div class="timeline" id="timeline-container">
-            <!-- JS 渲染時間軸內容 -->
-        </div>
-
-        <!-- 互動筆記備忘格 -->
-        <div class="remarks-section">
-            <div class="remarks-header">
-                <span>📝 每日隨手筆記 / 戰利品記賬</span>
-                <span class="save-status" id="save-status-indicator">✅ 已自動儲存</span>
+        <div class="info-card">
+            <div class="card-header">
+                <span>🏨 住宿與航班資訊</span>
+                <span class="flight-badge" id="flight-badge-info">HX622 / HX625</span>
             </div>
-            <textarea class="remarks-textarea" id="daily-remarks-input" placeholder="按此輸入今日花費、買咗嘅嘢或者隨手筆記..." oninput="autoSaveRemarks()"></textarea>
+            <div style="font-size: 0.85rem; font-weight: 800;" id="hotel-name-cn">🏨 明洞相鐵 FRESA INN</div>
+            <div style="font-size: 0.75rem; color: #666;" id="hotel-name-en">Sotetsu Fresa Inn Seoul Myeongdong</div>
+            <div style="font-size: 0.75rem; color: #888; margin-top: 2px;" id="hotel-address-kr">서울특별시 중구 明洞9길 36</div>
+            
+            <button class="copy-btn" onclick="copyHotelAddress()">
+                📋 複製酒店韓文地址 (給司機/Naver Map)
+            </button>
+        </div>
+
+        <div class="info-card">
+            <div class="card-header">
+                <span id="current-day-title">📅 DAY 1 · 11月1日 (日)</span>
+                <span class="hotel-tag" id="current-day-tag">抵達首爾 & 明洞夜市</span>
+            </div>
+
+            <div class="timeline" id="timeline-container"></div>
+
+            <div class="remarks-section">
+                <div class="remarks-header">
+                    <span>📝 每日隨手筆記 / 戰利品記賬</span>
+                    <span class="save-status" id="save-status-indicator">✅ 已自動儲存</span>
+                </div>
+                <textarea class="remarks-textarea" id="daily-remarks-input" placeholder="按此輸入今日花費、買咗嘅嘢或者隨手筆記..." oninput="autoSaveRemarks()"></textarea>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div class="card-header">
+                <span>🛒 必買與待辦 CheckList</span>
+            </div>
+            <div id="checklist-container">
+                <div class="checklist-item"><input type="checkbox" id="c1"><label for="c1">和談林楓葉門票 (預先確認 QR)</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c2"><label for="c2">韓國傳統棉被 (廣藏市場 88號店)</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c3"><label for="c3">Olive Young 護膚品 & 保濕面膜</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c4"><label for="c4">Daiso 弘大/明洞大樓採購小工具</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c5"><label for="c5">東大門 DDP 現代 Outlet 逛街</label></div>
+            </div>
         </div>
     </div>
 
-    <!-- 購物 & 打卡 CheckList -->
-    <div class="info-card">
-        <div class="card-header">
-            <span>🛒 必買與待辦 CheckList</span>
+    <!-- 天氣預報頁面 (Weather View) -->
+    <div id="weather-view" style="display: none;">
+        <div class="info-card">
+            <div class="card-header">
+                <span>🍁 首爾 11月初氣候概況</span>
+                <span class="hotel-tag">秋末偏冷</span>
+            </div>
+            <div style="font-size: 0.82rem; color: #444; line-height: 1.6;">
+                <b>🌡️ 平均氣溫：</b> $5^\circ\text{C} \sim 15^\circ\text{C}$<br>
+                <b>🧥 建議穿搭：</b> 採「洋葱式穿法」。早晚溫差大且風大，建議保暖底衫 + 衛衣/針織衫 + 防風外套或輕量羽絨。室內與地鐵皆有暖氣。
+            </div>
         </div>
-        <div id="checklist-container">
-            <div class="checklist-item"><input type="checkbox" id="c1"><label for="c1">和談林楓葉門票 (預先確認 QR)</label></div>
-            <div class="checklist-item"><input type="checkbox" id="c2"><label for="c2">韓國傳統棉被 (廣藏市場 88號店)</label></div>
-            <div class="checklist-item"><input type="checkbox" id="c3"><label for="c3">Olive Young 護膚品 & 保濕面膜</label></div>
-            <div class="checklist-item"><input type="checkbox" id="c4"><label for="c4">Daiso 弘大/明洞大樓採購小工具</label></div>
-            <div class="checklist-item"><input type="checkbox" id="c5"><label for="c5">東大門 DDP 現代 Outlet 逛街</label></div>
+
+        <div class="info-card">
+            <div class="card-header">
+                <span>📅 11/1 – 11/7 天氣預測</span>
+            </div>
+            <div class="weather-grid">
+                <div class="weather-card">
+                    <div class="weather-date">11/1 (日)</div>
+                    <div class="weather-temp">7° / 16°</div>
+                    <div class="weather-desc">🌤️ 晴時多雲</div>
+                </div>
+                <div class="weather-card">
+                    <div class="weather-date">11/2 (一) 🍁</div>
+                    <div class="weather-temp">6° / 15°</div>
+                    <div class="weather-desc">☀️ 晴朗賞楓好天氣</div>
+                </div>
+                <div class="weather-card">
+                    <div class="weather-date">11/3 (二)</div>
+                    <div class="weather-temp">5° / 14°</div>
+                    <div class="weather-desc">⛅ 多雲</div>
+                </div>
+                <div class="weather-card">
+                    <div class="weather-date">11/4 (三)</div>
+                    <div class="weather-temp">4° / 13°</div>
+                    <div class="weather-desc">🌤️ 晴朗偏冷</div>
+                </div>
+                <div class="weather-card">
+                    <div class="weather-date">11/5 (四)</div>
+                    <div class="weather-temp">5° / 14°</div>
+                    <div class="weather-desc">☀️ 晴朗</div>
+                </div>
+                <div class="weather-card">
+                    <div class="weather-date">11/6 (五)</div>
+                    <div class="weather-temp">3° / 12°</div>
+                    <div class="weather-desc">⛅ 多雲偏冷</div>
+                </div>
+            </div>
+
+            <a href="https://m.search.naver.com/search.naver?query=%EC%84%9C%EC%9A%B8+%EB%82%A0%EC%94%A1" target="_blank" class="external-link-btn">
+                🔍 點此開啟 Naver 首爾即時天氣預報
+            </a>
         </div>
     </div>
 
@@ -430,7 +514,6 @@
     </footer>
 
     <script>
-        // 行程與人員數據資料庫
         const tripData = {
             oscar: {
                 subtitle: "2026.11.01 – 2026.11.04 (3日2夜快閃)",
@@ -549,32 +632,41 @@
             }
         };
 
-        let currentTraveler = 'oscar';
+        let currentTab = 'oscar';
         let currentDayIndex = 0;
 
-        // 初始化
         function initApp() {
             renderTravelerInfo();
             renderDayNav();
             renderDayTimeline();
         }
 
-        // 切換人員
-        function switchTraveler(traveler) {
-            currentTraveler = traveler;
-            currentDayIndex = 0;
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            document.getElementById('btn-oscar').classList.toggle('active', tab === 'oscar');
+            document.getElementById('btn-mum').classList.toggle('active', tab === 'mum');
+            document.getElementById('btn-weather').classList.toggle('active', tab === 'weather');
 
-            document.getElementById('btn-oscar').classList.toggle('active', traveler === 'oscar');
-            document.getElementById('btn-mum').classList.toggle('active', traveler === 'mum');
+            const mainView = document.getElementById('main-itinerary-view');
+            const weatherView = document.getElementById('weather-view');
 
-            renderTravelerInfo();
-            renderDayNav();
-            renderDayTimeline();
+            if (tab === 'weather') {
+                mainView.style.display = 'none';
+                weatherView.style.display = 'block';
+            } else {
+                mainView.style.display = 'block';
+                weatherView.style.display = 'none';
+                currentDayIndex = 0;
+                renderTravelerInfo();
+                renderDayNav();
+                renderDayTimeline();
+            }
         }
 
-        // 渲染人員與酒店資訊
         function renderTravelerInfo() {
-            const data = tripData[currentTraveler];
+            const data = tripData[currentTab];
+            if (!data) return;
             document.getElementById('trip-dates-subtitle').innerText = data.subtitle;
             document.getElementById('flight-badge-info').innerText = data.flight;
             document.getElementById('hotel-name-cn').innerText = data.hotelCn;
@@ -582,11 +674,10 @@
             document.getElementById('hotel-address-kr').innerText = data.hotelKr;
         }
 
-        // 渲染天數按鈕
         function renderDayNav() {
             const container = document.getElementById('day-nav-container');
             container.innerHTML = '';
-            const days = tripData[currentTraveler].days;
+            const days = tripData[currentTab].days;
 
             days.forEach((day, index) => {
                 const btn = document.createElement('button');
@@ -608,9 +699,8 @@
             });
         }
 
-        // 渲染時間軸與讀取備忘錄
         function renderDayTimeline() {
-            const dayData = tripData[currentTraveler].days[currentDayIndex];
+            const dayData = tripData[currentTab].days[currentDayIndex];
             document.getElementById('current-day-title').innerText = `📅 DAY ${dayData.dayNum} · ${dayData.date}`;
             document.getElementById('current-day-tag').innerText = dayData.title;
 
@@ -629,13 +719,11 @@
                 container.appendChild(itemEl);
             });
 
-            // 讀取這一天儲存的 Remarks
             loadRemarks();
         }
 
-        // 複製地址功能
         function copyHotelAddress() {
-            const address = tripData[currentTraveler].hotelKr;
+            const address = tripData[currentTab].hotelKr;
             navigator.clipboard.writeText(address).then(() => {
                 alert('✅ 酒店韓文地址已複製到剪貼簿：\n' + address);
             }).catch(err => {
@@ -643,9 +731,8 @@
             });
         }
 
-        // 自動儲存與讀取 LocalStorage Remarks
         function getRemarksStorageKey() {
-            return `seoul_remarks_${currentTraveler}_day_${currentDayIndex + 1}`;
+            return `seoul_remarks_${currentTab}_day_${currentDayIndex + 1}`;
         }
 
         function loadRemarks() {
@@ -669,7 +756,6 @@
             }, 1500);
         }
 
-        // 執行初始化
         initApp();
     </script>
 </body>
