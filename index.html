@@ -430,9 +430,9 @@
                 <span>🏨 住宿與航班資訊</span>
                 <span class="flight-badge" id="flight-badge-info">HX622 / HX625</span>
             </div>
-            <div style="font-size: 0.85rem; font-weight: 800;" id="hotel-name-cn">🏨 明洞相鐵 FRESA INN</div>
-            <div style="font-size: 0.75rem; color: #666;" id="hotel-name-en">Sotetsu Fresa Inn Seoul Myeongdong</div>
-            <div style="font-size: 0.75rem; color: #888; margin-top: 2px;" id="hotel-address-kr">서울특별시 중구 明洞9길 36</div>
+            <div style="font-size: 0.85rem; font-weight: 800;" id="hotel-name-cn">🏨 Layer Hostel</div>
+            <div style="font-size: 0.75rem; color: #666;" id="hotel-name-en">Layer Hostel Seoul</div>
+            <div style="font-size: 0.75rem; color: #888; margin-top: 2px;" id="hotel-address-kr">서울특별시 중구 명동길 74</div>
             
             <button class="copy-btn" onclick="copyHotelAddress()">
                 📋 複製酒店韓文地址 (給司機/Naver Map)
@@ -449,7 +449,7 @@
 
             <div class="remarks-section">
                 <div class="remarks-header">
-                    <span>📝 每日隨手筆記 / 戰利品記賬</span>
+                    <span>📝 每日隨手筆記 / 戰利品記帳</span>
                     <span class="save-status" id="save-status-indicator">✅ 已自動儲存</span>
                 </div>
                 <textarea class="remarks-textarea" id="daily-remarks-input" placeholder="按此輸入今日花費、買咗嘅嘢或者隨手筆記..." oninput="autoSaveRemarks()"></textarea>
@@ -504,9 +504,9 @@
             oscar: {
                 subtitle: "2026.11.01 – 2026.11.04 (3日2夜快閃)",
                 flight: "HX622 (17:55抵達) / HX625 (23:05起飛)",
-                hotelCn: "🏨 明洞相鐵 FRESA INN",
-                hotelEn: "Sotetsu Fresa Inn Seoul Myeongdong",
-                hotelKr: "서울특별시 중구 明洞9길 36",
+                hotelCn: "🏨 Layer Hostel (레이어 호스텔)",
+                hotelEn: "Layer Hostel Seoul",
+                hotelKr: "서울특별시 중구 명동길 74 (레이어 호스텔)",
                 days: [
                     {
                         dayNum: 1,
@@ -514,7 +514,7 @@
                         title: "抵達首爾 & 明洞夜市",
                         items: [
                             { time: "17:55", title: "抵達仁川國際機場 (ICN)", desc: "乘搭 HX622 抵達，辦理入境手續、取行李。" },
-                            { time: "19:00", title: "乘搭 AREX 直通列車", desc: "往首爾站，再轉乘地鐵前往明洞酒店 Check-in。" },
+                            { time: "19:00", title: "乘搭 AREX 直通列車", desc: "往首爾站，轉乘地鐵至 Layer Hostel Check-in。" },
                             { time: "20:30", title: "明洞商圈 & 晚宵夜", desc: "逛明洞小吃街，吃韓式炸雞或神仙雪濃湯。" }
                         ]
                     },
@@ -743,19 +743,16 @@
             }, 1500);
         }
 
-        // 🌟 自動抓取 Open-Meteo 氣象 API (首爾經緯度: 37.5665, 126.9780)
         function fetchLiveSeoulWeather() {
             const url = 'https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.9780&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode&timezone=Asia%2FTokyo';
 
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    // 更新當前實時溫度
                     const currentTemp = Math.round(data.current_weather.temperature);
                     document.getElementById('api-current-temp').innerText = `${currentTemp}°C`;
                     document.getElementById('api-current-status').innerText = `風速: ${data.current_weather.windspeed} km/h · 氣候狀態: ${getWeatherDesc(data.current_weather.weathercode).label}`;
 
-                    // 渲染未來 7 天預報
                     const grid = document.getElementById('api-forecast-grid');
                     grid.innerHTML = '';
 
@@ -783,7 +780,6 @@
                 });
         }
 
-        // 天氣代碼對照表
         function getWeatherDesc(code) {
             if (code === 0) return { icon: '☀️', label: '晴朗' };
             if (code === 1 || code === 2) return { icon: '🌤️', label: '多雲時晴' };
