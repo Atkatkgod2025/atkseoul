@@ -3,624 +3,674 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>首爾雙行程秋葉行 🇰🇷 手繪風旅程小助手</title>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Google Fonts: Zen Maru Gothic (日系圓體) -->
+    <title>首爾秋日楓葉之旅 2026 🍁</title>
+    <!-- Google Fonts: Zen Maru Gothic & Nunito -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        washi: '#FFFCF6',
-                        ink: '#3E3A39',
-                        coral: '#F2A497',
-                        yamabuki: '#F6D27A',
-                        mizu: '#A8D3E6',
-                        wakatake: '#B9DAA5',
-                        cream: '#FFF9ED'
-                    },
-                    fontFamily: {
-                        sans: ['"Zen Maru Gothic"', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        'hand': '4px 4px 0px #3E3A39',
-                        'hand-sm': '2px 2px 0px #3E3A39',
-                        'hand-lg': '6px 6px 0px #3E3A39',
-                    }
-                }
-            }
-        }
-    </script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-washi: #FFFCF6;
+            --card-bg: #FFFFFF;
+            --ink-black: #2C2C2C;
+            --coral-red: #E06D53;
+            --coral-soft: #FDF0ED;
+            --yamabuki-yellow: #E2A03F;
+            --yamabuki-soft: #FCF6E8;
+            --mizu-blue: #5C8D89;
+            --mizu-soft: #EEF4F3;
+            --wakatake-green: #688E67;
+            --wakatake-soft: #EFF4EF;
+            --border-color: #383838;
+            --shadow-color: rgba(56, 56, 56, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Zen Maru Gothic', 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            background-color: #FFFCF6;
-            color: #3E3A39;
-            font-family: 'Zen Maru Gothic', sans-serif;
-            background-image: radial-gradient(#3e3a3915 1px, transparent 0);
+            background-color: var(--bg-washi);
+            color: var(--ink-black);
+            padding: 16px 12px 60px 12px;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.5;
+            background-image: radial-gradient(#E8E3D9 1px, transparent 1px);
             background-size: 16px 16px;
         }
 
-        .border-ink {
-            border: 3px solid #3E3A39;
-        }
-        .border-ink-sm {
-            border: 2px solid #3E3A39;
-        }
-
-        /* SVG Float Animations */
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(3deg); }
-        }
-        @keyframes bounceTab {
-            0% { transform: scale(0.95); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        /* 頂部標題與成員切換按鈕 */
+        header {
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 18px 14px;
+            background: var(--card-bg);
+            border: 3px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: 4px 4px 0px var(--border-color);
+            position: relative;
         }
 
-        .anim-float {
-            animation: floatSlow 4s ease-in-out infinite;
-        }
-        .tab-bounce {
-            animation: bounceTab 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* Reduced Motion */
-        @media (prefers-reduced-motion: reduce) {
-            .anim-float, .tab-bounce {
-                animation: none !important;
-            }
+        .header-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--ink-black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        .header-subtitle {
+            font-size: 0.82rem;
+            color: #666;
+            margin-top: 4px;
+            font-weight: 700;
         }
-        ::-webkit-scrollbar-track {
-            background: #FFFCF6;
+
+        /* 切換人選 Tabs */
+        .traveler-selector {
+            display: flex;
+            background: #EFECE6;
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            padding: 4px;
+            margin-top: 14px;
+            gap: 4px;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #F6D27A;
-            border: 2px solid #3E3A39;
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px 4px;
+            border: none;
             border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #666;
+            background: transparent;
+        }
+
+        .tab-btn.active {
+            background: var(--coral-red);
+            color: white;
+            box-shadow: 2px 2px 0px var(--border-color);
+            border: 2px solid var(--border-color);
+        }
+
+        /* 天數分頁導航 */
+        .day-nav {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            scrollbar-width: none;
+        }
+
+        .day-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .day-btn {
+            flex: 0 0 auto;
+            min-width: 58px;
+            padding: 8px 10px;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px var(--border-color);
+            transition: all 0.15s ease;
+        }
+
+        .day-btn.active {
+            background: var(--yamabuki-yellow);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 2px 4px 0px var(--border-color);
+        }
+
+        /* 資訊卡片 */
+        .info-card {
+            background: var(--card-bg);
+            border: 3px solid var(--border-color);
+            border-radius: 18px;
+            padding: 14px;
+            margin-bottom: 16px;
+            box-shadow: 4px 4px 0px var(--border-color);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px dashed #E0E0E0;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            font-weight: 800;
+        }
+
+        .hotel-tag {
+            background: var(--mizu-soft);
+            color: var(--mizu-blue);
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            border: 1px solid var(--mizu-blue);
+        }
+
+        .flight-badge {
+            background: var(--coral-soft);
+            color: var(--coral-red);
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            border: 1px solid var(--coral-red);
+        }
+
+        /* 複製地址專用按鈕 */
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+            padding: 4px 8px;
+            background: #F0F0F0;
+            border: 1.5px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--ink-black);
+        }
+
+        .copy-btn:active {
+            background: #DDD;
+        }
+
+        /* 行程時間軸 */
+        .timeline {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 10px;
+            bottom: 10px;
+            width: 3px;
+            background: var(--border-color);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 14px;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            padding: 12px;
+            box-shadow: 3px 3px 0px var(--border-color);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 16px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--yamabuki-yellow);
+            border: 2px solid var(--border-color);
+        }
+
+        .time-badge {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            background: var(--wakatake-soft);
+            color: var(--wakatake-green);
+            border: 1px solid var(--wakatake-green);
+            border-radius: 6px;
+            margin-bottom: 4px;
+        }
+
+        .item-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--ink-black);
+        }
+
+        .item-desc {
+            font-size: 0.8rem;
+            color: #555;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        .highlight-box {
+            background: #FFFCEB;
+            border: 1.5px dashed var(--yamabuki-yellow);
+            border-radius: 8px;
+            padding: 6px 8px;
+            margin-top: 6px;
+            font-size: 0.75rem;
+            color: #7A5B00;
+            font-weight: 700;
+        }
+
+        /* 隨手筆記/備忘格 (Interactive Remarks Box) */
+        .remarks-section {
+            margin-top: 16px;
+            background: var(--yamabuki-soft);
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            padding: 12px;
+            box-shadow: 3px 3px 0px var(--border-color);
+        }
+
+        .remarks-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--ink-black);
+            margin-bottom: 6px;
+        }
+
+        .save-status {
+            font-size: 0.7rem;
+            color: var(--wakatake-green);
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .save-status.show {
+            opacity: 1;
+        }
+
+        .remarks-textarea {
+            width: 100%;
+            height: 70px;
+            background: white;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 0.8rem;
+            color: var(--ink-black);
+            resize: none;
+            outline: none;
+        }
+
+        .remarks-textarea:focus {
+            border-color: var(--coral-red);
+        }
+
+        /* 購物 CheckList */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #E5E5E5;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--coral-red);
+            cursor: pointer;
+        }
+
+        /* 底部註腳 */
+        footer {
+            text-align: center;
+            font-size: 0.72rem;
+            color: #888;
+            margin-top: 24px;
+            font-weight: 700;
         }
     </style>
 </head>
-<body class="pb-24 text-ink">
+<body>
 
-    <!-- Sticky Navigation Header -->
-    <header class="sticky top-0 z-50 bg-[#FFFCF6]/90 backdrop-blur-md border-b-4 border-ink px-4 py-2.5">
-        <div class="max-w-xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <svg class="w-7 h-7 text-coral anim-float" viewBox="0 0 64 64" fill="none">
-                    <path d="M12 36L48 16L38 48L28 36L12 36Z" fill="#F2A497" stroke="#3E3A39" stroke-width="4" stroke-linejoin="round"/>
-                    <path d="M28 36L38 48L42 30" stroke="#3E3A39" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span class="font-black text-lg tracking-wider">首爾秋旅 🇰🇷</span>
-            </div>
-            
-            <nav class="flex gap-1.5 text-xs font-bold">
-                <a href="#itinerary" class="bg-yamabuki px-2.5 py-1.5 rounded-full border-ink-sm shadow-hand-sm hover:translate-y-0.5 transition">📅 行程</a>
-                <a href="#info" class="bg-mizu px-2.5 py-1.5 rounded-full border-ink-sm shadow-hand-sm hover:translate-y-0.5 transition">✈️ 機酒</a>
-                <a href="#checklist" class="bg-wakatake px-2.5 py-1.5 rounded-full border-ink-sm shadow-hand-sm hover:translate-y-0.5 transition">🛍️ 清單</a>
-            </nav>
+    <!-- 標題與成員切換 -->
+    <header>
+        <div class="header-title">🍁 首爾秋日賞楓之旅 2026</div>
+        <div class="header-subtitle" id="trip-dates-subtitle">2026.11.01 – 2026.11.04 (3日2夜快閃)</div>
+        
+        <div class="traveler-selector">
+            <button class="tab-btn active" id="btn-oscar" onclick="switchTraveler('oscar')">Oscar (11/1-11/4 快閃)</button>
+            <button class="tab-btn" id="btn-mum" onclick="switchTraveler('mum')">Nic & Mum (11/1-11/7 漫遊)</button>
         </div>
     </header>
 
-    <main class="max-w-xl mx-auto px-4 mt-4 space-y-6">
+    <!-- 天數導航 -->
+    <div class="day-nav" id="day-nav-container">
+        <!-- JS 自動產生 Day 按鈕 -->
+    </div>
 
-        <!-- Traveler Mode Switcher (Oscar vs Nic & Mum) -->
-        <section class="bg-cream rounded-3xl p-3 border-ink shadow-hand">
-            <div class="text-xs font-black text-center mb-2 text-ink/70">👤 請選擇旅程成員檢視表：</div>
-            <div class="grid grid-cols-2 gap-2">
-                <button id="btn-user-oscar" onclick="switchTraveler('oscar')" class="py-2.5 px-3 rounded-2xl font-black text-xs border-ink shadow-hand transition flex flex-col items-center gap-0.5 bg-coral text-white">
-                    <span>🙋‍♂️ Oscar 行程</span>
-                    <span class="text-[10px] opacity-90 font-normal">3日2夜快閃 (11/1 - 11/4)</span>
-                </button>
-                <button id="btn-user-nic" onclick="switchTraveler('nic')" class="py-2.5 px-3 rounded-2xl font-black text-xs border-ink shadow-hand transition flex flex-col items-center gap-0.5 bg-washi text-ink hover:bg-yamabuki">
-                    <span>👩‍👦 Nic & Mum 行程</span>
-                    <span class="text-[10px] text-ink/70 font-normal">7日6夜漫遊 (11/1 - 11/7)</span>
-                </button>
+    <!-- 酒店與航班概覽 -->
+    <div class="info-card">
+        <div class="card-header">
+            <span>🏨 住宿與航班資訊</span>
+            <span class="flight-badge" id="flight-badge-info">HX622 / HX625</span>
+        </div>
+        <div style="font-size: 0.85rem; font-weight: 800;" id="hotel-name-cn">🏨 明洞相鐵 FRESA INN</div>
+        <div style="font-size: 0.75rem; color: #666;" id="hotel-name-en">Sotetsu Fresa Inn Seoul Myeongdong</div>
+        <div style="font-size: 0.75rem; color: #888; margin-top: 2px;" id="hotel-address-kr">서울특별시 중구 明洞9길 36</div>
+        
+        <button class="copy-btn" onclick="copyHotelAddress()">
+            📋 複製酒店韓文地址 (給司機/Naver Map)
+        </button>
+    </div>
+
+    <!-- 每日行程時間軸 -->
+    <div class="info-card">
+        <div class="card-header">
+            <span id="current-day-title">📅 DAY 1 · 11月1日 (日)</span>
+            <span class="hotel-tag" id="current-day-tag">抵達首爾 & 明洞夜市</span>
+        </div>
+
+        <div class="timeline" id="timeline-container">
+            <!-- JS 渲染時間軸內容 -->
+        </div>
+
+        <!-- 互動筆記備忘格 -->
+        <div class="remarks-section">
+            <div class="remarks-header">
+                <span>📝 每日隨手筆記 / 戰利品記賬</span>
+                <span class="save-status" id="save-status-indicator">✅ 已自動儲存</span>
             </div>
-        </section>
+            <textarea class="remarks-textarea" id="daily-remarks-input" placeholder="按此輸入今日花費、買咗嘅嘢或者隨手筆記..." oninput="autoSaveRemarks()"></textarea>
+        </div>
+    </div>
 
-        <!-- Hero Section & Animated Banner -->
-        <section class="bg-cream rounded-3xl p-5 border-ink shadow-hand relative overflow-hidden">
-            <div class="absolute -top-1 -right-2 opacity-80 anim-float">
-                <svg width="70" height="70" viewBox="0 0 100 100" fill="none">
-                    <path d="M50 80C50 80 52 55 30 40C10 25 15 5 45 15C50 17 50 17 55 15C85 5 90 25 70 40C48 55 50 80 50 80Z" fill="#F6D27A" stroke="#3E3A39" stroke-width="4" stroke-linejoin="round"/>
-                    <path d="M50 80L50 95" stroke="#3E3A39" stroke-width="4" stroke-linecap="round"/>
-                </svg>
-            </div>
+    <!-- 購物 & 打卡 CheckList -->
+    <div class="info-card">
+        <div class="card-header">
+            <span>🛒 必買與待辦 CheckList</span>
+        </div>
+        <div id="checklist-container">
+            <div class="checklist-item"><input type="checkbox" id="c1"><label for="c1">和談林楓葉門票 (預先確認 QR)</label></div>
+            <div class="checklist-item"><input type="checkbox" id="c2"><label for="c2">韓國傳統棉被 (廣藏市場 88號店)</label></div>
+            <div class="checklist-item"><input type="checkbox" id="c3"><label for="c3">Olive Young 護膚品 & 保濕面膜</label></div>
+            <div class="checklist-item"><input type="checkbox" id="c4"><label for="c4">Daiso 弘大/明洞大樓採購小工具</label></div>
+            <div class="checklist-item"><input type="checkbox" id="c5"><label for="c5">東大門 DDP 現代 Outlet 逛街</label></div>
+        </div>
+    </div>
 
-            <div class="flex items-center gap-2 mb-2">
-                <span id="hero-tag" class="bg-coral text-white text-xs font-black px-3 py-1 rounded-full border-ink-sm uppercase tracking-wider">Oscar 快閃 3日2夜</span>
-                <span id="hero-date" class="text-xs font-bold text-ink/70">2026.11.01 - 11.04</span>
-            </div>
-
-            <h1 id="hero-title" class="text-2xl font-black mb-2 flex items-center gap-2">
-                3日2夜快閃首爾秋葉行
-            </h1>
-            <p id="hero-desc" class="text-xs font-bold text-ink/80 leading-relaxed">
-                🍁 和談林楓葉賞紅葉 · 弘大買衫 · 廣藏市場傳統被 · 東大門夜市 Cafe 漫遊
-            </p>
-
-            <!-- Countdown Box -->
-            <div class="mt-4 bg-washi p-3 rounded-2xl border-ink-sm shadow-hand-sm flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <span class="text-xl">⏳</span>
-                    <span class="text-xs font-bold">離出發香港航空 HX628：</span>
-                </div>
-                <div id="countdown" class="font-black text-sm text-coral bg-cream px-2.5 py-1 rounded-xl border-ink-sm">
-                    計算中...
-                </div>
-            </div>
-        </section>
-
-        <!-- Flight & Hotel Info Section -->
-        <section id="info" class="space-y-4">
-            <h2 class="text-lg font-black flex items-center gap-2">
-                <span class="bg-mizu p-1.5 rounded-xl border-ink-sm text-sm">✈️</span> 航班與住宿資料
-            </h2>
-
-            <!-- Flights Card -->
-            <div class="bg-washi p-4 rounded-3xl border-ink shadow-hand space-y-3">
-                <div class="flex justify-between items-center border-b-2 border-ink pb-2">
-                    <span class="font-black text-sm flex items-center gap-1.5">
-                        <i class="fa-solid fa-plane-departure text-coral"></i> 去程 HX628 (共同)
-                    </span>
-                    <span class="text-xs font-bold bg-yamabuki px-2 py-0.5 rounded-full border-ink-sm">11月1日 (日)</span>
-                </div>
-                <div class="flex justify-between items-center text-xs font-bold">
-                    <div>
-                        <div class="text-base font-black">08:55</div>
-                        <div class="text-ink/60">香港 (HKG) T1</div>
-                    </div>
-                    <div class="text-center px-2">
-                        <div class="text-[10px] text-ink/50">3小時35分</div>
-                        <div class="text-coral">➔➔➔</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-base font-black">13:30</div>
-                        <div class="text-ink/60">首爾仁川 (ICN) T1</div>
-                    </div>
-                </div>
-
-                <!-- Return Flight (Dynamic based on user) -->
-                <div id="return-flight-box" class="space-y-2">
-                    <!-- Javascript rendered -->
-                </div>
-            </div>
-
-            <!-- Hotel Card -->
-            <div class="bg-cream p-4 rounded-3xl border-ink shadow-hand space-y-2">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <span id="hotel-tag" class="bg-wakatake text-xs font-black px-2.5 py-0.5 rounded-full border-ink-sm inline-block mb-1">已預訂 11/1 - 11/3</span>
-                        <h3 class="font-black text-base">Layer hostel 2-1 4인 ddp</h3>
-                        <p class="text-xs text-ink/70 font-bold mt-0.5">📍 東大門 / DDP 附近 (深夜逛街超級方便！)</p>
-                    </div>
-                    <svg class="w-10 h-10 text-coral" viewBox="0 0 64 64" fill="none">
-                        <rect x="12" y="16" width="40" height="40" rx="8" fill="#A8D3E6" stroke="#3E3A39" stroke-width="4"/>
-                        <path d="M20 28H28V36H20V28Z" fill="#FFF9ED" stroke="#3E3A39" stroke-width="3"/>
-                        <path d="M36 28H44V36H36V28Z" fill="#FFF9ED" stroke="#3E3A39" stroke-width="3"/>
-                        <path d="M26 56V46H38V56" fill="#F2A497" stroke="#3E3A39" stroke-width="3"/>
-                    </svg>
-                </div>
-
-                <div class="flex gap-2 pt-2">
-                    <a href="https://map.naver.com/v5/search/Layer%20hostel" target="_blank" class="flex-1 text-center bg-washi hover:bg-yamabuki transition text-xs font-bold py-2 rounded-xl border-ink-sm shadow-hand-sm flex items-center justify-center gap-1">
-                        🗺️ Naver Map 導航
-                    </a>
-                    <a href="https://map.kakao.com/" target="_blank" class="flex-1 text-center bg-washi hover:bg-mizu transition text-xs font-bold py-2 rounded-xl border-ink-sm shadow-hand-sm flex items-center justify-center gap-1">
-                        🟡 Kakao Map 搜尋
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Itinerary Timeline Section -->
-        <section id="itinerary" class="space-y-4">
-            <div class="flex justify-between items-center">
-                <h2 class="text-lg font-black flex items-center gap-2">
-                    <span class="bg-yamabuki p-1.5 rounded-xl border-ink-sm text-sm">🗓️</span> 每日精彩行程
-                </h2>
-                <span class="text-[11px] font-bold text-ink/60">點擊切換日期</span>
-            </div>
-
-            <!-- Day Selector Tabs (Rendered via JS) -->
-            <div id="day-tabs-container" class="grid grid-cols-3 gap-2">
-                <!-- Dynamic Day buttons -->
-            </div>
-
-            <!-- Timeline Items Box -->
-            <div id="timeline-container" class="space-y-3">
-                <!-- Dynamically populated by JavaScript -->
-            </div>
-
-            <!-- BONUS: Daily Interactive Remarks / Notes Box -->
-            <div class="bg-cream p-4 rounded-3xl border-ink shadow-hand space-y-2.5">
-                <div class="flex justify-between items-center border-b-2 border-ink pb-2">
-                    <h3 class="font-black text-xs text-ink flex items-center gap-1.5">
-                        <span class="text-base">📝</span> <span id="remarks-title">Day 1 隨手筆記 / 戰利品記賬</span>
-                    </h3>
-                    <span id="save-indicator" class="text-[10px] font-bold text-wakatake bg-white px-2 py-0.5 rounded-full border-ink-sm">
-                        ✅ 已自動儲存
-                    </span>
-                </div>
-                <p class="text-[10px] font-bold text-ink/60">可在下方輸入這天記錄的開支、備忘地址或心得，系統會自動儲存：</p>
-                <textarea id="daily-note-input" oninput="saveDailyNote()" rows="3" placeholder="例如：廣藏市場買棉被 ₩85,000、明洞買面膜 ₩32,000..." class="w-full bg-washi border-ink-sm rounded-2xl p-3 text-xs font-bold text-ink focus:outline-none focus:ring-2 focus:ring-coral shadow-inner resize-none"></textarea>
-            </div>
-        </section>
-
-        <!-- Checklists & To-Do Section -->
-        <section id="checklist" class="space-y-4">
-            <h2 class="text-lg font-black flex items-center gap-2">
-                <span class="bg-wakatake p-1.5 rounded-xl border-ink-sm text-sm">🛍️</span> 必買與準備 Check List
-            </h2>
-
-            <div class="bg-washi p-4 rounded-3xl border-ink shadow-hand space-y-3">
-                <h3 class="font-black text-sm flex items-center justify-between border-b-2 border-ink pb-1.5">
-                    <span>🛒 韓國購物必買清單</span>
-                    <span class="text-[10px] font-normal text-ink/60">(可勾選自動儲存)</span>
-                </h3>
-                <div class="space-y-2 text-xs font-bold" id="shopping-list-box"></div>
-            </div>
-
-            <div class="bg-cream p-4 rounded-3xl border-ink shadow-hand space-y-3">
-                <h3 class="font-black text-sm border-b-2 border-ink pb-1.5">
-                    🧳 出發前準備清單
-                </h3>
-                <div class="space-y-2 text-xs font-bold" id="prep-list-box"></div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="mt-8 text-center text-xs font-bold text-ink/50 py-4">
-        3日2夜快閃 & 7日6夜漫遊首爾 🇰🇷 祝大家都有個超美好的秋季旅程！
+    <footer>
+        🍁 祝你地首爾之旅玩得開心，買得滿足！🍁
     </footer>
 
-    <!-- Interactive Logic Script -->
     <script>
-        // Current Active Traveler ('oscar' or 'nic') and Active Day Number
-        let currentTraveler = 'oscar';
-        let currentDay = 1;
-
-        // Shared or Specific Itineraries
-        const itineraryData = {
+        // 行程與人員數據資料庫
+        const tripData = {
             oscar: {
-                1: [
-                    { time: '13:30', title: '抵達仁川國際機場 (ICN)', desc: '辦理入境、領取 eSIM / 網卡、加值 T-Money 卡。搭乘 AREX 或 6001 機場巴士直達東大門。', tag: '🚌 交通', tagColor: 'bg-mizu', mustVisit: false },
-                    { time: '15:30', title: 'Layer Hostel DDP 放行李', desc: '於 Layer Hostel DDP 登記入住或先寄存行李，準備出發商圈。', tag: '🏨 住宿', tagColor: 'bg-wakatake', mustVisit: false },
-                    { time: '16:30', title: '明洞商圈 (12層 大創 Daiso + Olive Young 旗艦店)', desc: '衝明洞 12 層高 Daiso 大創買生活雜貨；到 Olive Young 旗艦店掃貨秋季護膚品美妝。', tag: '🛍️ 購物', tagColor: 'bg-yamabuki', mustVisit: true },
-                    { time: '19:30', title: '晚餐：明洞餃子 / 韓式烤肉', desc: '品嚐米芝蓮推薦明洞餃子刀削麵，或到附近享用厚切韓式五花肉。', tag: '🍜 美食', tagColor: 'bg-coral', mustVisit: false },
-                    { time: '21:30 - 深夜', title: '東大門深夜批發商圈 & 夜間 Cafe', desc: 'DDP 批發大樓 (apM, doota) 購物，造訪東大門深夜 Cafe 喝咖啡休息。', tag: '🌙 深夜景點', tagColor: 'bg-coral', mustVisit: true }
-                ],
-                2: [
-                    { time: '08:00', title: '出發前往 和談林 (昆池岩賞紅葉)', desc: '🍁 已預訂門票！地鐵江南站轉新盆唐線至京江線「昆池岩站」，轉乘計程車約10分鐘直達和談林。', tag: '🍁 必去景點', tagColor: 'bg-coral', mustVisit: true, specialNotice: '門票已買！建議提早出發以免紅葉季塞車。' },
-                    { time: '09:30 - 13:00', title: '和談林 漫步賞楓 & 單軌纜車', desc: '漫步千株紅葉與黃色銀杏樹林間，拍下絕美秋景照片。', tag: '📸 拍照打卡', tagColor: 'bg-yamabuki', mustVisit: true },
-                    { time: '14:30', title: '返回首爾 ➔ 弘大商圈 (買衫褲外套)', desc: '前往弘大停車場街、Musinsa Standard 掃貨韓系秋冬外套、長褲與配件。', tag: '🛍️ 購物', tagColor: 'bg-yamabuki', mustVisit: true },
-                    { time: '17:30', title: '延南洞 / 弘大網紅 Cafe', desc: '延南洞巷弄造訪 Café Layered / Antique Coffee 享受手沖咖啡與英式司康。', tag: '☕ Cafe', tagColor: 'bg-mizu', mustVisit: false },
-                    { time: '19:30', title: '晚餐：弘大烤豬五花肉 / 韓式炸雞', desc: '享用熱騰騰的韓式烤肉或延南洞炸雞啤酒。', tag: '🍻 美食', tagColor: 'bg-coral', mustVisit: false }
-                ],
-                3: [
-                    { time: '09:30', title: '廣藏市場 (買100%手工棉被 + 傳統小食)', desc: '廣藏市場挑選正宗韓國微纖維溫暖四季被；順便食綠豆餅、生牛肉、麻藥飯捲。', tag: '🛏️ 必買棉被', tagColor: 'bg-wakatake', mustVisit: true, specialNotice: '店家提供免費真空壓縮，非常方便攜帶上機！' },
-                    { time: '13:00', title: '聖水洞 (Seongsu) 潮流巡禮', desc: '打卡 DIOR 概念店、Tamburins 香氛店、Nudake 黑色藝術蛋糕咖啡店。', tag: '☕ 聖水洞', tagColor: 'bg-mizu', mustVisit: true },
-                    { time: '17:00', title: '最後補貨：Daiso / 樂天超市', desc: '進行最後彩妝零食補貨，返回 Layer Hostel 取行李。', tag: '🛒 補貨', tagColor: 'bg-yamabuki', mustVisit: false },
-                    { time: '22:30', title: '前往仁川機場 (ICN) T1', desc: '乘搭深夜機場巴士前往仁川機場辦理退稅與登機。', tag: '🚌 交通', tagColor: 'bg-mizu', mustVisit: false },
-                    { time: '02:35 (11/4)', title: '香港航空 HX625 飛回香港', desc: '02:35 起飛，預計 05:45 抵達香港 HKG。快閃首爾圓滿結束！', tag: '✈️ 航班', tagColor: 'bg-coral', mustVisit: false }
+                subtitle: "2026.11.01 – 2026.11.04 (3日2夜快閃)",
+                flight: "HX622 (17:55抵達) / HX625 (23:05起飛)",
+                hotelCn: "🏨 明洞相鐵 FRESA INN",
+                hotelEn: "Sotetsu Fresa Inn Seoul Myeongdong",
+                hotelKr: "서울특별시 중구 明洞9길 36",
+                days: [
+                    {
+                        dayNum: 1,
+                        date: "11月1日 (日)",
+                        title: "抵達首爾 & 明洞夜市",
+                        items: [
+                            { time: "17:55", title: "抵達仁川國際機場 (ICN)", desc: "乘搭 HX622 抵達，辦理入境手續、取行李。" },
+                            { time: "19:00", title: "乘搭 AREX 直通列車", desc: "往首爾站，再轉乘地鐵前往明洞酒店 Check-in。" },
+                            { time: "20:30", title: "明洞商圈 & 晚宵夜", desc: "逛明洞小吃街，吃韓式炸雞或神仙雪濃湯。" }
+                        ]
+                    },
+                    {
+                        dayNum: 2,
+                        date: "11月2日 (一)",
+                        title: "🍁 和談林秋日賞楓專屬日",
+                        items: [
+                            { time: "07:30", title: "明洞出發前往和談林", desc: "乘搭地鐵至昆池岩站，轉乘特約的士/巴士抵達和談林入口。", highlight: "⚠️ 提早預備 QR Code 門票入場！" },
+                            { time: "09:30", title: "和談林 (Hwadam Botanic Garden) 賞楓", desc: "乘搭單軌列車觀賞滿山紅葉，漫步楓葉木棧道公園。" },
+                            { time: "14:00", title: "返回首爾市區 & 廣藏市場", desc: "品嚐綠豆餅、生牛肉、生章魚，前往 88 號店挑選韓國傳統棉被。" },
+                            { time: "18:00", title: "東大門 DDP & 現代 Outlet", desc: "晚上逛 DDP 建築夜景與東大門周邊商圈。" }
+                        ]
+                    },
+                    {
+                        dayNum: 3,
+                        date: "11月3日 (二)",
+                        title: "弘大購物 & Daiso 採購",
+                        items: [
+                            { time: "10:00", title: "弘大入口商圈逛街", desc: "逛美妝店、潮流服飾店與質感 Cafe 享用 Brunch。" },
+                            { time: "14:00", title: "Daiso 大樓 & Olive Young 補貨", desc: "大採購生活小物與護膚保養品。" },
+                            { time: "18:00", title: "前往仁川機場 & 返港", desc: "乘搭 AREX 前往機場，乘搭 HX625 (23:05) 返回香港。" }
+                        ]
+                    }
                 ]
             },
-            nic: {
-                1: [
-                    { time: '13:30', title: '抵達仁川國際機場 (ICN)', desc: '入境領取網卡，乘搭機場巴士前往東大門飯店。', tag: '🚌 交通', tagColor: 'bg-mizu', mustVisit: false },
-                    { time: '15:30', title: 'Layer Hostel DDP 放行李', desc: '登記入住或寄存行李，於周邊輕鬆熟悉環境。', tag: '🏨 住宿', tagColor: 'bg-wakatake', mustVisit: false },
-                    { time: '16:30', title: '明洞商圈 (Daiso + Olive Young)', desc: '輕鬆逛明洞 Daiso 與 Olive Young 買齊旅行保養必備品。', tag: '🛍️ 購物', tagColor: 'bg-yamabuki', mustVisit: true },
-                    { time: '19:30', title: '晚餐：明洞美食區', desc: '享用美味刀削麵或韓式拌飯。', tag: '🍜 美食', tagColor: 'bg-coral', mustVisit: false }
-                ],
-                2: [
-                    { time: '08:00', title: '和談林 (昆池岩賞紅葉漫遊)', desc: '🍁 與 Oscar 一起前往賞楓聖地和談林，搭乘纜車欣賞夢幻紅葉山景。', tag: '🍁 必去景點', tagColor: 'bg-coral', mustVisit: true },
-                    { time: '14:30', title: '弘大商圈 & 延南洞漫步', desc: '感受弘大年輕活力，逛逛韓系服飾與文青小店。', tag: '🛍️ 購物', tagColor: 'bg-yamabuki', mustVisit: false },
-                    { time: '18:00', title: '延南洞特色 Cafe 晚餐', desc: '於精緻咖啡館度過悠閒秋日夜晚。', tag: '☕ 咖啡館', tagColor: 'bg-mizu', mustVisit: false }
-                ],
-                3: [
-                    { time: '09:30', title: '廣藏市場 (選購手工棉被)', desc: '選購精緻莫代爾被與品嚐道地綠豆餅小食。', tag: '🛏️ 必買棉被', tagColor: 'bg-wakatake', mustVisit: true },
-                    { time: '13:00', title: '聖水洞 (Seongsu) 設計店巡禮', desc: '造訪工業風選品店、Tamburins 及潮流咖啡館。', tag: '☕ 聖水洞', tagColor: 'bg-mizu', mustVisit: true },
-                    { time: '19:00', title: '歡送 Oscar 晚宴', desc: '一同享用豐富韓式燒肉晚餐，準備送別 Oscar 機場快閃回港。', tag: '🍻 聚餐', tagColor: 'bg-coral', mustVisit: true }
-                ],
-                4: [
-                    { time: '10:00', title: '景福宮 & 三清洞韓屋村散步', desc: '穿韓服漫步景福宮秋景，造訪三清洞傳統韓屋咖啡館（如 Onion 安國店）。', tag: '🏯 文化景點', tagColor: 'bg-yamabuki', mustVisit: true },
-                    { time: '14:00', title: '仁寺洞 (Insadong) 傳統工藝街', desc: '逛人人廣場 (Ssamzigil)，品嚐韓式傳統茶館與糕點。', tag: '🍵 傳統茶館', tagColor: 'bg-wakatake', mustVisit: false },
-                    { time: '18:30', title: '晚餐：土俗村參雞湯', desc: '品嚐正宗濃郁的韓國人蔘雞湯，滋補養生。', tag: '🍲 必吃美食', tagColor: 'bg-coral', mustVisit: true }
-                ],
-                5: [
-                    { time: '10:30', title: '汝矣島現代百貨 (The Hyundai Seoul)', desc: '首爾最大最美複合式百貨！逛室內綠洲花園與各大韓國潮流品牌。', tag: '🏬 購物百貨', tagColor: 'bg-mizu', mustVisit: true },
-                    { time: '15:00', title: '汝矣島漢江公園 散步', desc: '欣賞漢江秋日江景，體驗韓國道地的「江邊吃外送泡麵/炸雞」。', tag: '🏞️ 漢江風景', tagColor: 'bg-wakatake', mustVisit: false },
-                    { time: '18:30', title: '晚餐：汝矣島美食區', desc: '品嚐韓式海鮮鍋或韓牛烤肉。', tag: '🥩 美食', tagColor: 'bg-coral', mustVisit: false }
-                ],
-                6: [
-                    { time: '10:00', title: '江南 COEX 星空圖書館 (Starfield Library)', desc: '打卡超級壯觀的數十公尺高巨型書牆，逛 COEX 購物中心。', tag: '📚 網紅打卡', tagColor: 'bg-yamabuki', mustVisit: true },
-                    { time: '14:00', title: '新沙洞林蔭大道 (Garosu-gil)', desc: '林蔭樹下漫步，造訪 Gentle Monster、3CE 及質感美妝甜點店。', tag: '🛍️ 精品選物', tagColor: 'bg-mizu', mustVisit: false },
-                    { time: '19:00', title: '首爾塔 (N Seoul Tower)  night view', desc: '搭乘纜車登上首爾塔，俯瞰首爾繁華絕美的璀璨夜景。', tag: '🌃 絕美夜景', tagColor: 'bg-coral', mustVisit: true }
-                ],
-                7: [
-                    { time: '10:30', title: '南山谷韓屋村 / 樂天超市最後採購', desc: '飯店退房寄存行李，前往樂天超市（首爾站店）採購零食伴手禮。', tag: '🛒 伴手禮', tagColor: 'bg-yamabuki', mustVisit: true },
-                    { time: '15:00', title: '前往仁川國際機場', desc: '乘搭機場巴士或 AREX 專線抵達仁川機場辦理退稅。', tag: '🚌 交通', tagColor: 'bg-mizu', mustVisit: false },
-                    { time: '19:30', title: '香港航空 返抵香港 (HKG)', desc: '順利搭機返回香港，結束精彩充實的 7日6夜首爾秋日之旅！', tag: '✈️ 航班', tagColor: 'bg-coral', mustVisit: false }
+            mum: {
+                subtitle: "2026.11.01 – 2026.11.07 (7日6夜漫遊)",
+                flight: "HX622 (17:55抵達) / HX629 (12:00起飛)",
+                hotelCn: "🏨 首爾東大門美居大使酒店",
+                hotelEn: "Mercure Ambassador Seoul Dongdaemun",
+                hotelKr: "서울특별시 중구 율곡로 308 (종로6가 289-3)",
+                days: [
+                    {
+                        dayNum: 1,
+                        date: "11月1日 (日)",
+                        title: "抵達首爾 & 東大門夜遊",
+                        items: [
+                            { time: "17:55", title: "抵達仁川國際機場 (ICN)", desc: "乘搭 HX622 抵達，辦理入境與拿行李。" },
+                            { time: "19:30", title: "入住首爾東大門美居大使酒店", desc: "乘搭機場巴士 6001 或 AREX 抵達酒店 Check-in。" },
+                            { time: "20:30", title: "東大門美食街", desc: "享用陳玉華一隻雞或東大門烤肉。" }
+                        ]
+                    },
+                    {
+                        dayNum: 2,
+                        date: "11月2日 (一)",
+                        title: "🍁 和談林賞楓 & 廣藏市場",
+                        items: [
+                            { time: "07:30", title: "前往和談林賞楓", desc: "一同前往昆池岩和談林欣賞滿山紅葉景致。" },
+                            { time: "14:00", title: "廣藏市場體驗", desc: "逛傳統市場、食綠豆餅、選購韓國優質傳統棉被。" }
+                        ]
+                    },
+                    {
+                        dayNum: 3,
+                        date: "11月3日 (二)",
+                        title: "弘大逛街 & Daiso 購物",
+                        items: [
+                            { time: "10:30", title: "弘大商圈漫步", desc: "逛精美小店、享用精緻下午茶。" },
+                            { time: "15:00", title: "Daiso & Olive Young 旗艦店", desc: "慢慢挑選生活用品與補貨保養品。" }
+                        ]
+                    },
+                    {
+                        dayNum: 4,
+                        date: "11月4日 (三)",
+                        title: "景福宮韓服 & 三清洞安國",
+                        items: [
+                            { time: "10:00", title: "景福宮賞楓 & 韓服體驗", desc: "穿著韓國傳統韓服在古宮紅葉下打卡拍照。" },
+                            { time: "13:00", title: "土俗村參雞湯", desc: "品嚐首爾最受歡迎的濃郁人蔘雞湯。" },
+                            { time: "15:00", title: "三清洞 & 安國 Onion Cafe", desc: "漫步傳統韓屋村，享用韓屋烘焙咖啡。" }
+                        ]
+                    },
+                    {
+                        dayNum: 5,
+                        date: "11月5日 (四)",
+                        title: "汝矣島現代百貨 & 江南星空圖書館",
+                        items: [
+                            { time: "11:00", title: "The Hyundai Seoul 現代百貨", desc: "參觀首爾最大型的概念百貨，感受室內植物園。" },
+                            { time: "15:30", title: "COEX 星空圖書館 (Starfield Library)", desc: "打卡宏偉的巨型書架與地下商圈。" },
+                            { time: "19:00", title: "首爾塔夜景", desc: "乘搭纜車登上 N 首爾塔觀賞首爾璀璨夜景。" }
+                        ]
+                    },
+                    {
+                        dayNum: 6,
+                        date: "11月6日 (五)",
+                        title: "樂天超市大採購 & 明洞商圈",
+                        items: [
+                            { time: "10:30", title: "首爾站樂天超市 (Lotte Mart)", desc: "採購韓國零食、紫菜、拉麵與伴手禮 (提供現場打包服務)。" },
+                            { time: "15:00", title: "明洞樂天百貨 & 美妝街", desc: "最後補貨，晚上享用精緻韓式燒肉。" }
+                        ]
+                    },
+                    {
+                        dayNum: 7,
+                        date: "11月7日 (六)",
+                        title: "輕鬆退房 & 返港",
+                        items: [
+                            { time: "08:30", title: "酒店 Check-out & 前往機場", desc: "乘搭機場巴士或 AREX 前往仁川機場。" },
+                            { time: "12:00", title: "乘搭 HX629 返港", desc: "滿載而歸，順利返抵香港！" }
+                        ]
+                    }
                 ]
             }
         };
 
-        const shoppingItems = [
-            { id: 's1', text: 'Olive Young 護膚品 (Torriden 保濕精華 / 麗珠蘭面膜)' },
-            { id: 's2', text: 'Daiso 12層生活雜貨 (韓國美妝蛋、美甲貼、旅行小卡套)' },
-            { id: 's3', text: '弘大韓系秋冬外套 & 衫褲 (Musinsa / MPlayground)' },
-            { id: 's4', text: '廣藏市場 100% 正宗韓國手工莫代爾/微纖維被' },
-            { id: 's5', text: '聖水洞 Tamburins 護手霜 / 香水' },
-            { id: 's6', text: '樂天超市 韓式泡麵 & 零食手信' }
-        ];
+        let currentTraveler = 'oscar';
+        let currentDayIndex = 0;
 
-        const prepItems = [
-            { id: 'p1', text: 'K-ETA / 護照有效期 6個月以上' },
-            { id: 'p2', text: '和談林門票 QR Code 截圖存檔 (11/2 已買票)' },
-            { id: 'p3', text: '韓國 eSIM / 4G 上網卡安裝' },
-            { id: 'p4', text: 'T-Money 交通卡 & 韓圜現金準備' },
-            { id: 'p5', text: '下載 Kakao Map / Naver Map 導航 App' }
-        ];
-
-        let checkedStates = JSON.parse(localStorage.getItem('seoul_checked_list') || '{}');
-        let dailyNotes = JSON.parse(localStorage.getItem('seoul_daily_notes') || '{}');
-
-        window.addEventListener('DOMContentLoaded', () => {
-            switchTraveler('oscar');
-            renderChecklists();
-            startCountdown();
-        });
-
-        // Traveler Toggle Logic
-        function switchTraveler(user) {
-            currentTraveler = user;
-            currentDay = 1;
-
-            const btnOscar = document.getElementById('btn-user-oscar');
-            const btnNic = document.getElementById('btn-user-nic');
-
-            if (user === 'oscar') {
-                btnOscar.className = "py-2.5 px-3 rounded-2xl font-black text-xs border-ink shadow-hand transition flex flex-col items-center gap-0.5 bg-coral text-white tab-bounce";
-                btnNic.className = "py-2.5 px-3 rounded-2xl font-black text-xs border-ink shadow-hand transition flex flex-col items-center gap-0.5 bg-washi text-ink hover:bg-yamabuki";
-                
-                document.getElementById('hero-tag').innerText = 'Oscar 快閃 3日2夜';
-                document.getElementById('hero-date').innerText = '2026.11.01 - 11.04';
-                document.getElementById('hero-title').innerText = '3日2夜快閃首爾秋葉行';
-                document.getElementById('hero-desc').innerText = '🍁 和談林楓葉賞紅葉 · 弘大買衫 · 廣藏市場傳統被 · 東大門夜市 Cafe 漫遊';
-                document.getElementById('hotel-tag').innerText = '已預訂 11/1 - 11/3 (2晚)';
-
-                document.getElementById('return-flight-box').innerHTML = `
-                    <div class="flex justify-between items-center border-b-2 border-ink pb-2 pt-2">
-                        <span class="font-black text-sm flex items-center gap-1.5">
-                            <i class="fa-solid fa-plane-arrival text-mizu"></i> 回程 HX625 (Oscar)
-                        </span>
-                        <span class="text-xs font-bold bg-yamabuki px-2 py-0.5 rounded-full border-ink-sm">11月4日 (三凌晨)</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs font-bold">
-                        <div>
-                            <div class="text-base font-black">02:35</div>
-                            <div class="text-ink/60">首爾仁川 (ICN) T1</div>
-                        </div>
-                        <div class="text-center px-2">
-                            <div class="text-[10px] text-ink/50">4小時10分</div>
-                            <div class="text-mizu">➔➔➔</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-base font-black">05:45</div>
-                            <div class="text-ink/60">香港 (HKG) T1</div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                btnNic.className = "py-2.5 px-3 rounded-2xl font-black text-xs border-ink shadow-hand transition flex flex-col items-center gap-0.5 bg-coral text-white tab-bounce";
-                btnOscar.className = "py-2.5 px-3 rounded-2xl font-black text-xs border-ink shadow-hand transition flex flex-col items-center gap-0.5 bg-washi text-ink hover:bg-yamabuki";
-                
-                document.getElementById('hero-tag').innerText = 'Nic & Mum 漫遊 7日6夜';
-                document.getElementById('hero-date').innerText = '2026.11.01 - 11.07';
-                document.getElementById('hero-title').innerText = '7日6夜首爾秋日深度遊';
-                document.getElementById('hero-desc').innerText = '🍁 和談林楓葉 · 景福宮韓服 · 汝矣島現代百貨 · 江南星空圖書館漫遊';
-                document.getElementById('hotel-tag').innerText = '已預訂 11/1 - 11/7 (6晚)';
-
-                document.getElementById('return-flight-box').innerHTML = `
-                    <div class="flex justify-between items-center border-b-2 border-ink pb-2 pt-2">
-                        <span class="font-black text-sm flex items-center gap-1.5">
-                            <i class="fa-solid fa-plane-arrival text-mizu"></i> 回程 HX629 (Nic & Mum)
-                        </span>
-                        <span class="text-xs font-bold bg-yamabuki px-2 py-0.5 rounded-full border-ink-sm">11月7日 (星期六)</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs font-bold">
-                        <div>
-                            <div class="text-base font-black">16:15</div>
-                            <div class="text-ink/60">首爾仁川 (ICN) T1</div>
-                        </div>
-                        <div class="text-center px-2">
-                            <div class="text-[10px] text-ink/50">3小時55分</div>
-                            <div class="text-mizu">➔➔➔</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-base font-black">19:10</div>
-                            <div class="text-ink/60">香港 (HKG) T1</div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            renderDayTabs();
-            switchDay(1);
+        // 初始化
+        function initApp() {
+            renderTravelerInfo();
+            renderDayNav();
+            renderDayTimeline();
         }
 
-        // Render Day Selector Tabs based on Traveler
-        function renderDayTabs() {
-            const container = document.getElementById('day-tabs-container');
-            const totalDays = currentTraveler === 'oscar' ? 3 : 7;
-            const dates = ['11/1 日', '11/2 月', '11/3 火', '11/4 水', '11/5 木', '11/6 金', '11/7 土'];
-            const subtitles = [
-                '明洞·東大門', '和談林·弘大', '廣藏被·聖水', 
-                '景福宮·韓服', '汝矣島百貨', '江南星空圖', '樂天超市·返港'
-            ];
+        // 切換人員
+        function switchTraveler(traveler) {
+            currentTraveler = traveler;
+            currentDayIndex = 0;
 
+            document.getElementById('btn-oscar').classList.toggle('active', traveler === 'oscar');
+            document.getElementById('btn-mum').classList.toggle('active', traveler === 'mum');
+
+            renderTravelerInfo();
+            renderDayNav();
+            renderDayTimeline();
+        }
+
+        // 渲染人員與酒店資訊
+        function renderTravelerInfo() {
+            const data = tripData[currentTraveler];
+            document.getElementById('trip-dates-subtitle').innerText = data.subtitle;
+            document.getElementById('flight-badge-info').innerText = data.flight;
+            document.getElementById('hotel-name-cn').innerText = data.hotelCn;
+            document.getElementById('hotel-name-en').innerText = data.hotelEn;
+            document.getElementById('hotel-address-kr').innerText = data.hotelKr;
+        }
+
+        // 渲染天數按鈕
+        function renderDayNav() {
+            const container = document.getElementById('day-nav-container');
             container.innerHTML = '';
-            for (let i = 1; i <= totalDays; i++) {
+            const days = tripData[currentTraveler].days;
+
+            days.forEach((day, index) => {
                 const btn = document.createElement('button');
-                btn.id = `btn-day-${i}`;
-                btn.onclick = () => switchDay(i);
-                btn.className = `day-btn bg-washi text-ink border-ink shadow-hand p-2 rounded-2xl font-black text-xs text-center transition hover:bg-yamabuki`;
-                btn.innerHTML = `D${i} (${dates[i-1]})<span class="block text-[9px] font-normal text-ink/70">${subtitles[i-1]}</span>`;
+                btn.className = `day-btn ${index === currentDayIndex ? 'active' : ''}`;
+                btn.innerText = `Day ${day.dayNum}`;
+                btn.onclick = () => {
+                    currentDayIndex = index;
+                    updateActiveDayNav();
+                    renderDayTimeline();
+                };
                 container.appendChild(btn);
-            }
-        }
-
-        // Switch Day View
-        function switchDay(day) {
-            currentDay = day;
-            const totalDays = currentTraveler === 'oscar' ? 3 : 7;
-
-            for (let i = 1; i <= totalDays; i++) {
-                const btn = document.getElementById(`btn-day-${i}`);
-                if (btn) {
-                    if (i === day) {
-                        btn.className = `day-btn bg-coral text-white border-ink shadow-hand p-2 rounded-2xl font-black text-xs text-center transition tab-bounce`;
-                    } else {
-                        btn.className = `day-btn bg-washi text-ink border-ink shadow-hand p-2 rounded-2xl font-black text-xs text-center transition hover:bg-yamabuki`;
-                    }
-                }
-            }
-
-            renderItinerary(day);
-            loadDailyNote(day);
-        }
-
-        // Render Timeline Cards
-        function renderItinerary(day) {
-            const container = document.getElementById('timeline-container');
-            container.innerHTML = '';
-
-            const list = itineraryData[currentTraveler][day] || [];
-            list.forEach(item => {
-                const card = document.createElement('div');
-                card.className = "bg-washi p-4 rounded-3xl border-ink shadow-hand relative space-y-1.5 transition";
-
-                const mustBadge = item.mustVisit 
-                    ? `<span class="bg-coral text-white text-[10px] font-black px-2 py-0.5 rounded-full border-ink-sm shadow-hand-sm">★ 必去</span>` 
-                    : '';
-
-                const noticeBox = item.specialNotice 
-                    ? `<div class="bg-yamabuki/40 p-2 rounded-xl border-ink-sm text-[11px] font-bold text-ink mt-2">💡 ${item.specialNotice}</div>` 
-                    : '';
-
-                card.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <span class="font-black text-xs text-coral flex items-center gap-1">
-                            ⏰ ${item.time}
-                        </span>
-                        <div class="flex items-center gap-1.5">
-                            ${mustBadge}
-                            <span class="${item.tagColor} text-ink text-[10px] font-bold px-2 py-0.5 rounded-full border-ink-sm">${item.tag}</span>
-                        </div>
-                    </div>
-                    <h3 class="font-black text-sm text-ink">${item.title}</h3>
-                    <p class="text-xs text-ink/75 font-bold leading-relaxed">${item.desc}</p>
-                    ${noticeBox}
-                `;
-                container.appendChild(card);
             });
         }
 
-        // Daily Remarks Note Box Persistence Logic
-        function getNoteKey(day) {
-            return `seoul_note_${currentTraveler}_d${day}`;
+        function updateActiveDayNav() {
+            const btns = document.querySelectorAll('.day-btn');
+            btns.forEach((btn, idx) => {
+                btn.classList.toggle('active', idx === currentDayIndex);
+            });
         }
 
-        function loadDailyNote(day) {
-            const titleElem = document.getElementById('remarks-title');
-            const inputElem = document.getElementById('daily-note-input');
-            const travelerName = currentTraveler === 'oscar' ? "Oscar" : "Nic & Mum";
+        // 渲染時間軸與讀取備忘錄
+        function renderDayTimeline() {
+            const dayData = tripData[currentTraveler].days[currentDayIndex];
+            document.getElementById('current-day-title').innerText = `📅 DAY ${dayData.dayNum} · ${dayData.date}`;
+            document.getElementById('current-day-tag').innerText = dayData.title;
+
+            const container = document.getElementById('timeline-container');
+            container.innerHTML = '';
+
+            dayData.items.forEach(item => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'timeline-item';
+                itemEl.innerHTML = `
+                    <span class="time-badge">⏰ ${item.time}</span>
+                    <div class="item-title">${item.title}</div>
+                    <div class="item-desc">${item.desc}</div>
+                    ${item.highlight ? `<div class="highlight-box">${item.highlight}</div>` : ''}
+                `;
+                container.appendChild(itemEl);
+            });
+
+            // 讀取這一天儲存的 Remarks
+            loadRemarks();
+        }
+
+        // 複製地址功能
+        function copyHotelAddress() {
+            const address = tripData[currentTraveler].hotelKr;
+            navigator.clipboard.writeText(address).then(() => {
+                alert('✅ 酒店韓文地址已複製到剪貼簿：\n' + address);
+            }).catch(err => {
+                alert('複製失敗，請手動複製：\n' + address);
+            });
+        }
+
+        // 自動儲存與讀取 LocalStorage Remarks
+        function getRemarksStorageKey() {
+            return `seoul_remarks_${currentTraveler}_day_${currentDayIndex + 1}`;
+        }
+
+        function loadRemarks() {
+            const key = getRemarksStorageKey();
+            const savedText = localStorage.getItem(key) || '';
+            document.getElementById('daily-remarks-input').value = savedText;
+        }
+
+        let saveTimer;
+        function autoSaveRemarks() {
+            const text = document.getElementById('daily-remarks-input').value;
+            const key = getRemarksStorageKey();
+            localStorage.setItem(key, text);
+
+            const indicator = document.getElementById('save-status-indicator');
+            indicator.classList.add('show');
             
-            titleElem.innerText = `${travelerName} - Day ${day} 隨手筆記 / 戰利品記賬`;
-            const savedText = localStorage.getItem(getNoteKey(day)) || '';
-            inputElem.value = savedText;
-            document.getElementById('save-indicator').innerText = "✅ 已自動儲存";
+            clearTimeout(saveTimer);
+            saveTimer = setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 1500);
         }
 
-        function saveDailyNote() {
-            const inputElem = document.getElementById('daily-note-input');
-            const key = getNoteKey(currentDay);
-            localStorage.setItem(key, inputElem.value);
-
-            const indicator = document.getElementById('save-indicator');
-            indicator.innerText = "💾 儲存中...";
-            setTimeout(() => {
-                indicator.innerText = "✅ 已自動儲存";
-            }, 300);
-        }
-
-        // Checklists Rendering
-        function renderChecklists() {
-            const shopBox = document.getElementById('shopping-list-box');
-            shopBox.innerHTML = shoppingItems.map(item => `
-                <label class="flex items-start gap-2 cursor-pointer p-2 rounded-xl bg-cream/60 hover:bg-yamabuki/30 transition border-ink-sm">
-                    <input type="checkbox" id="${item.id}" ${checkedStates[item.id] ? 'checked' : ''} onchange="toggleCheck('${item.id}')" class="mt-0.5 w-4 h-4 accent-coral rounded border-ink">
-                    <span class="${checkedStates[item.id] ? 'line-through text-ink/40' : ''}">${item.text}</span>
-                </label>
-            `).join('');
-
-            const prepBox = document.getElementById('prep-list-box');
-            prepBox.innerHTML = prepItems.map(item => `
-                <label class="flex items-start gap-2 cursor-pointer p-2 rounded-xl bg-washi hover:bg-mizu/30 transition border-ink-sm">
-                    <input type="checkbox" id="${item.id}" ${checkedStates[item.id] ? 'checked' : ''} onchange="toggleCheck('${item.id}')" class="mt-0.5 w-4 h-4 accent-coral rounded border-ink">
-                    <span class="${checkedStates[item.id] ? 'line-through text-ink/40' : ''}">${item.text}</span>
-                </label>
-            `).join('');
-        }
-
-        function toggleCheck(id) {
-            const checkbox = document.getElementById(id);
-            checkedStates[id] = checkbox.checked;
-            localStorage.setItem('seoul_checked_list', JSON.stringify(checkedStates));
-            renderChecklists();
-        }
-
-        // Countdown Timer towards Nov 1, 2026
-        function startCountdown() {
-            const targetDate = new Date('2026-11-01T08:55:00+08:00').getTime();
-
-            function update() {
-                const now = new Date().getTime();
-                const distance = targetDate - now;
-
-                if (distance < 0) {
-                    document.getElementById('countdown').innerText = '🎉 已順利出發！';
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
-                document.getElementById('countdown').innerText = `${days}天 ${hours}小時 ${minutes}分`;
-            }
-
-            update();
-            setInterval(update, 60000);
-        }
+        // 執行初始化
+        initApp();
     </script>
 </body>
 </html>
