@@ -439,7 +439,7 @@
         <div class="info-card">
             <div class="card-header">
                 <span>🏨 住宿與航班資訊</span>
-                <span class="flight-badge" id="flight-badge-info">HX622 / HX625</span>
+                <span class="flight-badge" id="flight-badge-info">HX628 / HX625</span>
             </div>
             <div style="font-size: 0.85rem; font-weight: 800;" id="hotel-name-cn">🏨 Layer Hostel</div>
             <div style="font-size: 0.75rem; color: #666;" id="hotel-name-en">Layer Hostel Seoul</div>
@@ -453,7 +453,7 @@
         <div class="info-card">
             <div class="card-header">
                 <span id="current-day-title">📅 DAY 1 · 11月1日 (日)</span>
-                <span class="hotel-tag" id="current-day-tag">抵達首爾 & 明洞夜市</span>
+                <span class="hotel-tag" id="current-day-tag">抵達首爾 & 弘大食玩買</span>
             </div>
 
             <div class="timeline" id="timeline-container"></div>
@@ -472,11 +472,11 @@
                 <span>🛒 必買與待辦 CheckList</span>
             </div>
             <div id="checklist-container">
-                <div class="checklist-item"><input type="checkbox" id="c1"><label for="c1">和談林楓葉門票 (預先確認 QR)</label></div>
-                <div class="checklist-item"><input type="checkbox" id="c2"><label for="c2">韓國傳統棉被 (廣藏市場 88號店)</label></div>
-                <div class="checklist-item"><input type="checkbox" id="c3"><label for="c3">Pola at home 韓系質感餐具選購</label></div>
-                <div class="checklist-item"><input type="checkbox" id="c4"><label for="c4">Folnua 聖水洞人氣設計師包款</label></div>
-                <div class="checklist-item"><input type="checkbox" id="c5"><label for="c5">60雞外賣辣椒炸雞 (Gochu Chicken)</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c1"><label for="c1">和談林楓葉門票 (15:00 預備 QR)</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c2"><label for="c2">廣藏市場 88號店 韓國傳統棉被</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c3"><label for="c3">廣藏市場古著潮街 (Vintage Store)</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c4"><label for="c4">Pola at home 聖水質感家品</label></div>
+                <div class="checklist-item"><input type="checkbox" id="c5"><label for="c5">Folnua 聖水旗艦店包款</label></div>
             </div>
         </div>
     </div>
@@ -514,7 +514,7 @@
         const tripData = {
             oscar: {
                 subtitle: "2026.11.01 – 2026.11.04 (3日2夜快閃)",
-                flight: "HX622 (17:55抵達) / HX625 (23:05起飛)",
+                flight: "HX628 (13:30抵達) / HX625 (00:05起飛)",
                 hotelCn: "🏨 Layer Hostel (레이어 호스텔)",
                 hotelEn: "Layer Hostel Seoul",
                 hotelKr: "서울특별시 중구 명동길 74 (레이어 호스텔)",
@@ -522,42 +522,49 @@
                     {
                         dayNum: 1,
                         date: "11月1日 (日)",
-                        title: "抵達首爾 & 우주집 美食宵夜",
+                        title: "抵達首爾 & 弘大食玩買專屬日",
                         items: [
-                            { time: "17:55", title: "抵達仁川國際機場 (ICN)", desc: "乘搭 HX622 抵達，辦理入境手續與提取行李。" },
-                            { time: "19:00", title: "前往 Layer Hostel Check-in", desc: "乘搭 AREX 直通列車至首爾站，轉乘地鐵前往 Layer Hostel。", transport: "🚇 地鐵 4號線 明洞站 8號出口 步行約 5 分鐘" },
-                            { time: "20:30", title: "🍽️ 우주집 (Woojujip) 韓式烤肉晚宴", desc: "首爾極具人氣的韓式烤肉與烤牛小腸名店，好好大吃一頓慶祝抵達首爾！", transport: "📍 鄰近明洞/市廳商圈，步行或搭地鐵 1 站即達" }
+                            { time: "08:55", title: "香港起飛 (HX628)", desc: "搭乘香港航空 HX628 飛往首爾仁川機場。" },
+                            { time: "13:30", title: "抵達仁川國際機場 (ICN)", desc: "辦理入境、提取行李，搭乘 AREX 直通列車往市區。" },
+                            { time: "15:00", title: "Layer Hostel Check-in", desc: "辦理入住與寄放行李（與 Nic & Mum 酒店鄰近）。" },
+                            { time: "16:00", title: "🛍️ 弘大入口商圈 (食玩買)", desc: "逛弘大潮流服飾、美妝、AK+ 購物中心、Daiso 旗艦店。", transport: "🚇 地鐵 2號線 弘大入口站 (홍대입구역) 9號出口" },
+                            { time: "18:30", title: "🍽️ 우주집 (Woojujip) 韓式烤肉晚宴", desc: "享用美味韓式烤肉與特製醬油烤肉！" },
+                            { time: "21:30", title: "🍗 60雞炸雞 (60계치킨) 宵夜", desc: "回酒店或在弘大外帶招牌辣椒炸雞 (Gochu Chicken) 配啤酒！" }
                         ]
                     },
                     {
                         dayNum: 2,
                         date: "11月2日 (一)",
-                        title: "🍁 和談林賞楓 & 60雞宵夜",
+                        title: "🍁 和談林賞楓 (15:00) ➔ 廣藏市場 ➔ 明洞 ➔ 東大門",
                         items: [
-                            { time: "07:30", title: "出發前往昆池岩和談林", desc: "搭乘地鐵至昆池岩站，轉乘特約的士或巴士前往和談林入口。", highlight: "⚠️ 預先準備好 QR Code 門票入場！" },
-                            { time: "09:30", title: "和談林 (Hwadam Botanic Garden) 賞楓", desc: "搭乘單軌列車觀賞滿山楓紅與木棧道公園。" },
-                            { time: "14:00", title: "廣藏市場傳統美食", desc: "品嚐綠豆餅、生牛肉、生章魚，挑選傳統棉被。" },
-                            { time: "18:00", title: "東大門 DDP & 現代 Outlet", desc: "夜晚漫步 DDP 建築夜景與周邊購物商圈。" },
-                            { time: "21:30", title: "🍗 60雞炸雞 (60계치킨) 外賣宵夜", desc: "外賣韓國超火爆「每日換新油炸60隻」的 60雞炸雞！推薦招牌辣椒炸雞 (Gochu Chicken)，回酒店配啤酒享用。", transport: "🛵 可透過 Baedal/Coupang Eats 外賣送到酒店或外帶" }
+                            { time: "09:30", title: "🥐 朝早輕鬆 Brunch", desc: "酒店附近享用美味韓式咖啡與烘焙早午餐。" },
+                            { time: "12:00", title: "🚌 出發前往昆池岩和談林", desc: "搭地鐵京江線至昆池岩站，轉乘計程車/接駁車至和談林入口（車程預計 1.5–2 小時）。", highlight: "⚠️ 預先準備好 15:00 入場 QR Code 門票！" },
+                            { time: "15:00", title: "🍁 和談林 (Hwadam Botanic Garden) 賞楓", desc: "賞楓核心時間！乘搭單軌列車，漫步滿山紅葉木棧道公園。" },
+                            { time: "17:00", title: "🚌 返回首爾市區", desc: "搭車返回首爾市區廣藏市場。" },
+                            { time: "18:30", title: "🧵 廣藏市場 (棉被街 & 潮街古著)", desc: "趕在棉被店 (關門約 19:00) 挑選優質棉被；順便逛廣藏市場二樓古著潮街 (Vintage Area)。", highlight: "⚠️ 棉被街約 18:30–19:00 陸續關門，抵達後直奔棉被店！" },
+                            { time: "20:00", title: "🛍️ 明洞商圈夜遊", desc: "逛明洞夜市小吃、樂天百貨與美妝旗艦店。" },
+                            { time: "22:00", title: "🌙 東大門 DDP & 現代 Outlet 購物", desc: "深夜東大門批發商圈與 DDP 建築夜景巡禮。" }
                         ]
                     },
                     {
                         dayNum: 3,
                         date: "11月3日 (二)",
-                        title: "聖水洞購物 (Folnua + Pola at home)",
+                        title: "Check-out ➔ 聖水洞購物 ➔ 前往機場 (返港)",
                         items: [
-                            { time: "10:30", title: "🛍️ Pola at home (폴라아ット홈) 家品雜貨", desc: "聖水洞極具質感的韓系陶瓷餐具、碗盤與居家生活選品店。", transport: "🚇 2號線 聖水站 (성수역) 3號出口 步行約 8 分鐘" },
-                            { time: "12:00", title: "聖水洞 Cafe & Brunch", desc: "在聖水洞工業風咖啡廳享用早午餐與精品咖啡。" },
-                            { time: "13:30", title: "🛍️ Folnua (폴느아) 聖水旗艦店", desc: "韓國超夯設計師皮革包款與時尚服飾選品店，質感絕佳！", transport: "🚇 聖水洞商圈內，步行約 5 分鐘即可抵達" },
-                            { time: "16:00", title: "Daiso 大樓 & Olive Young 補貨", desc: "回市區進行最後的美妝與生活小物採購。" },
-                            { time: "18:00", title: "前往仁川機場 & 返港", desc: "乘搭 AREX 直通列車前往機場，搭乘 HX625 (23:05) 返港。" }
+                            { time: "10:00", title: "退房 Check-out & 寄存行李", desc: "在 Layer Hostel 辦理退房並將行李寄存在櫃檯。" },
+                            { time: "11:00", title: "🛍️ 聖水洞 (Pola at home + Folnua)", desc: "先逛 Pola at home 質感陶瓷餐具，再逛 Folnua 聖水旗艦店試背包款！", transport: "🚇 地鐵 2號線 聖水站 (성수역) 3號出口" },
+                            { time: "13:30", title: "☕ 聖水洞工業風 Cafe Lunch", desc: "享用聖水洞知名網美咖啡廳與午餐。" },
+                            { time: "16:00", title: "明洞/市廳最後補貨", desc: "返回市區進行 Olive Young 與伴手禮最後大採購。" },
+                            { time: "18:30", title: "🎒 返回酒店取行李 ➔ 仁川機場", desc: "搭 AREX 直通列車前往仁川機場第一航廈。" },
+                            { time: "21:00", title: "機場 Check-in & 入境辦理", desc: "辦理登機手續、退稅與機場免稅店最後採購。" },
+                            { time: "00:05", title: "✈️ HX625 飛往香港 (11/4 凌晨)", desc: "搭乘 HX625 (00:05 起飛) 順利返抵香港！" }
                         ]
                     }
                 ]
             },
             mum: {
                 subtitle: "2026.11.01 – 2026.11.07 (7日6夜漫遊)",
-                flight: "HX622 (17:55抵達) / HX629 (12:00起飛)",
+                flight: "HX628 (13:30抵達) / HX629 (12:00起飛)",
                 hotelCn: "🏨 首爾東大門美居大使酒店",
                 hotelEn: "Mercure Ambassador Seoul Dongdaemun",
                 hotelKr: "서울특별시 중구 율곡로 308 (종로6가 289-3)",
@@ -565,21 +572,25 @@
                     {
                         dayNum: 1,
                         date: "11月1日 (日)",
-                        title: "抵達首爾 & 우주집 烤肉美食",
+                        title: "抵達首爾 & 弘大食玩買",
                         items: [
-                            { time: "17:55", title: "抵達仁川國際機場 (ICN)", desc: "乘搭 HX622 抵達，辦理入境與拿行李。" },
-                            { time: "19:30", title: "入住首爾東大門美居大使酒店", desc: "乘搭機場巴士 6001 或 AREX 抵達酒店 Check-in。" },
-                            { time: "20:30", title: "🍽️ 우주집 (Woojujip) 韓式烤肉", desc: "美味韓式烤肉晚宴，開啟韓國秋日漫遊之旅！", transport: "🚇 地鐵 1/4號線 東大門站 鄰近" }
+                            { time: "08:55", title: "香港起飛 (HX628)", desc: "搭乘 HX628 飛往首爾仁川機場。" },
+                            { time: "13:30", title: "抵達仁川國際機場 (ICN)", desc: "辦理入境、提取行李，前往酒店 Check-in。" },
+                            { time: "16:00", title: "🛍️ 弘大入口商圈 (食玩買)", desc: "逛弘大潮流美妝店與服飾圈。" },
+                            { time: "18:30", title: "🍽️ 우주집 (Woojujip) 韓式烤肉", desc: "享用首爾熱門韓式烤肉與牛肉餐點。" },
+                            { time: "21:30", title: "🍗 60雞炸雞 (60계치킨) 宵夜", desc: "外賣品嚐招牌辣椒炸雞，非常解饞！" }
                         ]
                     },
                     {
                         dayNum: 2,
                         date: "11月2日 (一)",
-                        title: "🍁 和談林賞楓 & 60雞宵夜",
+                        title: "🍁 和談林賞楓 ➔ 廣藏市場 ➔ 明洞 ➔ 東大門",
                         items: [
-                            { time: "07:30", title: "前往和談林賞楓", desc: "一同前往昆池岩和談林欣賞滿山紅葉景致。" },
-                            { time: "14:00", title: "廣藏市場體驗", desc: "逛傳統市場、食綠豆餅、選購韓國優質傳統棉被。" },
-                            { time: "21:00", title: "🍗 60雞炸雞 (60계치킨) 宵夜", desc: "外賣品嚐每日新油炸的 60雞招牌辣椒炸雞，非常解饞！" }
+                            { time: "09:30", title: "朝早 Brunch 享用", desc: "享用韓式精緻早午餐。" },
+                            { time: "12:00", title: "前往昆池岩和談林", desc: "搭車前往昆池岩和談林。" },
+                            { time: "15:00", title: "🍁 和談林賞楓 (15:00 入場)", desc: "觀賞紅葉與搭乘單軌列車。" },
+                            { time: "18:30", title: "🧵 廣藏市場 (棉被 & 潮街)", desc: "選購優質韓國傳統棉被與逛古著潮街。" },
+                            { time: "20:00", title: "明洞夜市 & 東大門夜遊", desc: "體驗熱鬧夜市與東大門商圈。" }
                         ]
                     },
                     {
@@ -587,9 +598,9 @@
                         date: "11月3日 (二)",
                         title: "聖水洞質感購物 (Pola at home + Folnua)",
                         items: [
-                            { time: "10:30", title: "🛍️ Pola at home 質感家品", desc: "選購超可愛的韓系陶瓷餐具與生活雜貨。", transport: "🚇 2號線 聖水站 3號出口" },
-                            { time: "13:00", title: "🛍️ Folnua 聖水旗艦店包款", desc: "試背選購韓國熱門設計師品牌皮革包包與質感單品。" },
-                            { time: "16:00", title: "Daiso & Olive Young 旗艦店", desc: "慢慢挑選生活用品與補貨保養品。" }
+                            { time: "11:00", title: "🛍️ Pola at home 質感家品", desc: "選購超可愛的韓系陶瓷餐具與生活雜貨。" },
+                            { time: "13:00", title: "🛍️ Folnua 聖水旗艦店包款", desc: "試背選購韓國熱門設計師品牌皮革包包。" },
+                            { time: "16:00", title: "Daiso & Olive Young 補貨", desc: "慢慢挑選生活用品與補貨保養品。" }
                         ]
                     },
                     {
