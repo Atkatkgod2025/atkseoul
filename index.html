@@ -268,7 +268,7 @@
             color: var(--wakatake-green);
             border: 1px solid var(--wakatake-green);
             border-radius: 6px;
-            width: 75px;
+            width: 80px;
             outline: none;
         }
 
@@ -318,6 +318,72 @@
 
         .delete-card-btn:hover {
             color: #D93838;
+        }
+
+        /* 地方分類清單專用樣式 */
+        .area-section-title {
+            font-size: 1.05rem;
+            font-weight: 900;
+            margin: 18px 0 10px 0;
+            color: var(--coral-red);
+            border-left: 5px solid var(--coral-red);
+            padding-left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .area-item-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            box-shadow: 2px 2px 0px var(--border-color);
+        }
+
+        .area-item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .area-item-title {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: var(--ink-black);
+        }
+
+        .hours-badge {
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            background: var(--yamabuki-soft);
+            color: #7A5B00;
+            border: 1px solid var(--yamabuki-yellow);
+            border-radius: 6px;
+        }
+
+        .area-item-desc {
+            font-size: 0.78rem;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--mizu-blue);
+            background: var(--mizu-soft);
+            border: 1px solid var(--mizu-blue);
+            border-radius: 6px;
+            padding: 2px 6px;
+            text-decoration: none;
+            margin-top: 6px;
         }
 
         .remarks-section {
@@ -470,7 +536,7 @@
         <div class="traveler-selector">
             <button class="tab-btn active" id="btn-oscar" onclick="switchTab('oscar')">Oscar (11/1-11/4)</button>
             <button class="tab-btn" id="btn-mum" onclick="switchTab('mum')">Nic & Mum (11/1-11/7)</button>
-            <button class="tab-btn" id="btn-category" onclick="switchTab('category')">🗂️ 店家/景點分類</button>
+            <button class="tab-btn" id="btn-category" onclick="switchTab('category')">📍 按地區分類檢索</button>
             <button class="tab-btn" id="btn-weather" onclick="switchTab('weather')">☀️ 實時氣候</button>
         </div>
     </header>
@@ -529,14 +595,14 @@
         </div>
     </div>
 
-    <!-- 全景點與店家分類檢索 Tab -->
+    <!-- 📍 純地區分類檢索 Tab (含營業時間與直接外連 Redirect) -->
     <div id="category-view" style="display: none;">
         <div class="info-card">
             <div class="card-header">
-                <span>🗂️ 首爾精選店家/餐廳分類清單</span>
-                <span class="hotel-tag">清單總覽</span>
+                <span>📍 首爾精選店家/景點（純地區分類）</span>
+                <span class="hotel-tag">按地區分類</span>
             </div>
-            <div id="category-list-container"></div>
+            <div id="area-list-container"></div>
         </div>
     </div>
 
@@ -708,53 +774,80 @@
             }
         };
 
-        const categoriesData = [
+        // 📍 純地區分類資料庫（含 Open/Close Hours 與直接外連 Redirect 連結）
+        const areaCategorizedData = [
             {
-                category: "☕ Cafe & 甜品烘焙",
+                areaName: "🛍️ 弘大 / 延南洞 / 望遠 / 合井 / 新村",
                 items: [
-                    { name: "LOWIDE Coffee Bakery (@lowide.seoul)", loc: "聖水洞", desc: "招牌鹽可頌 (Salt Bread) 與爆款貝果，聖水洞超高人氣 Bakery Cafe！" },
-                    { name: "Creamchic (@creamchic_seoul)", loc: "明洞", desc: "極具法式浪漫風格的質感烘焙甜點 Cafe。" },
-                    { name: "클래식 해례커피 (Haerye Coffee)", loc: "聖水洞 (연무장길 28-20)", desc: "傳統韓式特調與極致質感的自烘咖啡館。" },
-                    { name: "beekend.seoul", loc: "弘大/延南洞", desc: "超火爆的杜拜法式吐司 (Dubai French Toast)！" },
-                    { name: "CHU PLUS (츄플러스)", loc: "延南洞", desc: "現點現炸、外酥內軟的極品吉拿棒 (Churros)。" },
-                    { name: "O Bagel House (오베이글 하우스)", loc: "合井洞 (431-21)", desc: "人氣質感貝果專賣店，多種口味抹醬 (10:00-19:00)。" },
-                    { name: "Haz Bakery", loc: "聖水洞 (二街 316-46)", desc: "極致厚實餡料夾心貝果，拍照與口感兼具！" },
-                    { name: "할매기름집 (Grandma Oil Shop)", loc: "聖水洞", desc: "傳統韓式煎餅與香濃冰淇淋甜品店。" },
-                    { name: "투아투아 (Tour a Tour)", loc: "江南新沙洞 (642-15)", desc: "主打 Sourdough 酸麵包的法式質感 Brunch。" },
-                    { name: "AVEK CHERI (아벡쉐리)", loc: "漢南洞", desc: "漢南洞經典法式烘焙甜點與精品咖啡店。" },
-                    { name: "와플대학 (Waffle College)", loc: "弘大/各分店", desc: "韓國經典連鎖平價鮮奶油水果鬆餅。" }
+                    { name: "할매기름집 (弘大店 / 新論峴店)", hours: "11:30 - 22:00", desc: "招牌傳統韓式煎餅 (pancake)", link: "https://www.instagram.com/gireumzip_official?utm_source=ig_web_button_share_sheet&cplk=ZDNlZDc0MzIxNw==" },
+                    { name: "Sosin Isso (新村奶油燉排骨)", hours: "11:30 - 22:00", desc: "新村超人氣濃郁奶油燉排骨", link: "" },
+                    { name: "Bagel Land 弘大店 (베이글랜드 홍대점)", hours: "10:00 - 20:00", desc: "弘大人氣手作質感貝果專賣店", link: "https://www.instagram.com/_bagelland/" },
+                    { name: "CHU PLUS (츄플러스 延南店)", hours: "11:00 - 21:00", desc: "延南洞現點現炸極品吉拿棒 (Churros)", link: "https://www.instagram.com/chu_plus/" },
+                    { name: "오월상점 (May Store 延南店)", hours: "12:00 - 21:00", desc: "延南洞溫馨可愛文具與生活小物選品店", link: "https://www.instagram.com/5maystore/" },
+                    { name: "와플대학 (Waffle College 弘大店)", hours: "10:00 - 23:00", desc: "韓國經典平價鮮奶油鬆餅", link: "" },
+                    { name: "beekend.seoul (비캔드 望遠站)", hours: "11:00 - 19:30", desc: "超火爆杜拜法式吐司 (Dubai French Toast)", link: "https://www.instagram.com/beekend.seoul/" },
+                    { name: "loofon (弘大服飾店)", hours: "12:00 - 22:00", desc: "弘大潮流質感韓系服飾店", link: "" },
+                    { name: "Modern House (모던하우스 弘大/各大分店)", hours: "10:30 - 22:00", desc: "國民大型生活家居雜貨選品館", link: "https://www.instagram.com/modernhouse_korea?obrf=a2wxd3AzdXE1bTBu" },
+                    { name: "O Bagel House (오베이글 하우스 合井店)", hours: "10:00 - 19:00", desc: "📍 麻浦區合井洞 431-21 人氣貝果專賣店", link: "" },
+                    { name: "The Grazing Pig 풀뜯는돼지 (水芹豬)", hours: "12:00 - 22:00 (LO 21:20)", desc: "弘大水芹菜搭配香脆五花肉爆款烤肉店", link: "https://www.instagram.com/pul__pig" },
+                    { name: "우주집 牛酒家 (弘大本店)", hours: "16:00 - 24:00", desc: "首爾在地人極度推薦韓式烤牛肉與烤牛腸", link: "" }
                 ]
             },
             {
-                category: "🛍️ 潮流服飾 & 女裝/男裝選品",
+                areaName: "☕ 聖水洞 (Seongsu)",
                 items: [
-                    { name: "Folnua (폴느아)", loc: "聖水洞旗艦店", desc: "韓國極受歡迎的設計師質感皮革包款與時尚單品。" },
-                    { name: "OOTJ Seongsu Branch", loc: "聖水洞", desc: "韓國高質感版型牛仔褲專賣店。" },
-                    { name: "NOS Seongsu (@nos_seongsu)", loc: "聖水洞", desc: "聖水洞前衛時尚選品展演空間與服飾品牌。" },
-                    { name: "오월상점 (May Store)", loc: "延南洞", desc: "溫馨可愛的文具選品、飾品與小物店。" },
-                    { name: "廣藏市場二樓潮街 (Vintage Area)", loc: "廣藏市場", desc: "首爾挖寶必去的美式/日系古著潮牌街區。" }
+                    { name: "클래식 해례커피 (Haerye Coffee)", hours: "11:30 - 21:30", desc: "📍 城東區 연무장길 28-20 1F (地鐵2號線聖水站)", link: "https://www.instagram.com/haeryecoffee/" },
+                    { name: "Haz Bakery (하츠베이커리 성수점)", hours: "10:00 - 21:00", desc: "📍 城東區 聖水洞二街 316-46 (勁厚夾心貝果)", link: "https://www.instagram.com/cafe_hazbakery/" },
+                    { name: "bd버거 (bd burger 聖水)", hours: "11:30 - 21:00", desc: "聖水超火爆厚切蝦餅與牛肉美式漢堡", link: "" },
+                    { name: "SSOC (聖水洞意式小酒館)", hours: "11:30 - 22:00", desc: "聖水洞浪漫質感 Bistro (CatchTable 預約熱門)", link: "https://www.catchtable.net/zh-TW/shop/SSOCSEONGSU", extraLink: "https://www.instagram.com/ssoc_seoul/" },
+                    { name: "horno 오르노 Pizza (聖水/麻浦/首爾站店)", hours: "10:00 - 23:00 (🔥 MUST GO!)", desc: "聖水洞氣氛極佳的手工窯烤 Pizza 專賣店", link: "https://www.instagram.com/horno_seoul/" },
+                    { name: "Nos 聖水 (NOS Seongsu)", hours: "11:00 - 20:00", desc: "聖水洞前衛潮流選品展演空間 & 早午餐", link: "https://www.instagram.com/nos_seongsu?dlrf=MTk0bHUweGhja3hrdg==" },
+                    { name: "Pola at home (폴라앳홈 聖水店)", hours: "12:00 - 19:00", desc: "超可愛韓系質感陶瓷餐具、碗盤與居家雜貨", link: "" },
+                    { name: "Three to eighty (鞋店 Seongsu)", hours: "12:00 - 20:00", desc: "聖水洞質感流行鞋款專賣店", link: "" },
+                    { name: "Chaakan (착한구두 聖水 Space)", hours: "12:00 - 21:00", desc: "韓國平價質感女鞋聖水旗艦店", link: "" },
+                    { name: "rolarola (로라로라 聖水店)", hours: "11:00 - 20:00", desc: "韓系甜美法式復古女裝品牌", link: "" },
+                    { name: "Musinsa (무신사 스토어 聖水 / Mega Store)", hours: "11:00 - 21:00", desc: "韓國第一大潮流服裝選品旗艦館", link: "" },
+                    { name: "OOTJ Seongsu Branch (Jeans)", hours: "11:30 - 20:30", desc: "韓國高質感版型牛仔褲專賣店", link: "" }
                 ]
             },
             {
-                category: "🏠 質感家品 & 陶瓷生活選品",
+                areaName: "🥑 江南 / 新沙洞 / 狎鷗亭 (Gangnam / Sinsa)",
                 items: [
-                    { name: "Pola at home (폴라아ット홈)", loc: "聖水洞", desc: "超可愛韓系質感陶瓷餐具、碗盤與居家雜貨。" },
-                    { name: "nutceramic_누트세라믹", loc: "鍾路區 (Jongno 1)", desc: "設計感極強的手作陶瓷器具與生活選品。" },
-                    { name: "Modern House (모던하우스)", loc: "弘大/各大百貨", desc: "韓國國民大型生活家居用品與佈置用品連鎖店。" },
-                    { name: "廣藏市場 128號 & 156號棉被店", loc: "廣藏市場", desc: "首爾採購輕盈、保暖、可機洗韓國傳統棉被必去名店！" }
+                    { name: "chizn.kr (🔥 MUST GO!)", hours: "11:30 - 21:00", desc: "📍 1F 49 Apgujeong-ro 42-gil, Gangnam-gu (江南必去打卡地標!)", link: "https://www.instagram.com/chizn.kr/" },
+                    { name: "투아투아 (Tour a Tour)", hours: "一至四 09:00-18:00 / 五至日 09:00-19:00", desc: "📍 首爾江南區新沙洞 642-15 (Fig Sourdough Brunch)", link: "https://www.instagram.com/tour_a_tour_/" },
+                    { name: "Lowide Brunch 狎鷗亭", hours: "10:00 - 20:00", desc: "狎鷗亭超高人氣 Bakery & 早午餐 Cafe", link: "https://www.instagram.com/lowide.seoul?obrf=bWZra3J5YmRqYmVk" }
                 ]
             },
             {
-                category: "🍽️ 必吃餐廳 & 燒肉宵夜",
+                areaName: "☕ 漢南洞 (Hannam-dong)",
                 items: [
-                    { name: "chizn.kr (🔥 MUST GO!)", loc: "江南區", desc: "江南超級火爆打卡地標與主題餐廳！" },
-                    { name: "新村奶油燉排骨 (Sosinesso)", loc: "新村/弘大", desc: "香濃滑順、辣度可調的超誘人奶油燉排骨。" },
-                    { name: "풀뜯는돼지 (The Grazing Pig)", loc: "弘大 (12:00-22:00)", desc: "水芹菜香氣搭配香脆五花肉的爆款烤肉店！" },
-                    { name: "우주집 (Woojujip)", loc: "弘大/市廳", desc: "首爾當地人極度推薦的韓式烤牛肉與烤牛小腸。" },
-                    { name: "horno 오르노 (Pizza)", loc: "聖水洞 (10:00-23:00)", desc: "聖水洞氣氛極佳的手工窯烤 Pizza & 意式輕食。" },
-                    { name: "bd버거 (bd burger)", loc: "聖水洞", desc: "聖水洞超火爆厚切蝦餅與牛肉美式漢堡。" },
-                    { name: "聖水洞 SSOC", loc: "聖水洞", desc: "氣氛浪漫、餐點精緻的意式小酒館 (Bistro)。" },
-                    { name: "60雞炸雞 (60계치킨)", loc: "明洞/東大門/外賣", desc: "每日換新油炸 60 隻！必點招牌辣椒炸雞 (Gochu Chicken)。" }
+                    { name: "AVEK CHERI (아벡쉐리 漢南/延南店)", hours: "10:00 - 21:00", desc: "漢南洞浪漫法式鹽包 (Salt Bread) 與 Brunch", link: "https://www.instagram.com/avekcheri/" },
+                    { name: "Folnua (폴뉴아 漢南旗艦店)", hours: "12:00 - 20:00", desc: "韓國極受歡迎設計師質感皮革包款", link: "" },
+                    { name: "rolarola (로라로라 漢南店)", hours: "11:00 - 20:00", desc: "張員瑛代言熱門韓系法式女裝品牌", link: "" }
+                ]
+            },
+            {
+                areaName: "🧵 鍾路 / 廣藏市場 / 光化門 / 東大門",
+                items: [
+                    { name: "nutceramic_누트세라믹 (鍾路店)", hours: "12:00 - 19:00", desc: "📍 1, Jong-ro, Jongno-gu (設計感手作陶瓷器具)", link: "" },
+                    { name: "廣藏市場 128號 & 156號棉被店", hours: "09:00 - 18:30 (約18:30關門)", desc: "輕盈保暖可機洗韓國傳統棉被", link: "" },
+                    { name: "Hyodo chicken (孝道炸雞 光化門店)", hours: "15:00 - 23:00", desc: "光化門人氣特製特調醬汁炸雞", link: "" },
+                    { name: "Andwich (東大門早餐 Cafe)", hours: "08:00 - 17:00", desc: "東大門清晨/早晨精緻三明治早午餐", link: "https://www.instagram.com/andwich_seoul/" },
+                    { name: "東大門鞋城C棟 (동대문신발도매상가C동)", hours: "凌晨 01:00 - 中午 11:00 (逢週五六公休)", desc: "📍 鍾路區昌信洞 436-65 (地鐵東大門站4號出口/東廟站6號出口)", link: "https://naver.me/GxLa2PHE" }
+                ]
+            },
+            {
+                areaName: "🛍️ 明洞 / 市廳 (Myeongdong)",
+                items: [
+                    { name: "Cream chic (明洞 Dessert Cafe)", hours: "10:00 - 22:30", desc: "明洞商圈極具質感法式甜點 Cafe", link: "https://www.instagram.com/creamchic_seoul?psln=MXNycHl0ZWE1eDI3" },
+                    { name: "Chaakan (착한구두 明洞店)", hours: "11:00 - 22:00", desc: "明洞商圈平價時尚鞋款實體店", link: "" }
+                ]
+            },
+            {
+                areaName: "🍁 其他重點景點 (郊區 / 市郊)",
+                items: [
+                    { name: "首爾大公園 (서울대공원賞楓 & 動物園)", hours: "09:00 - 18:00 (纜車營運至 17:40)", desc: "🚇 地鐵4號線大公園站。搭纜車上山漫步紅葉步道看老虎，約 16:30 搭纜車下山欣賞金黃夕陽！", link: "" },
+                    { name: "as’on (潮流選品)", hours: "依各分店營業時間", desc: "韓系潮流服飾選品店", link: "" }
                 ]
             }
         ];
@@ -785,7 +878,7 @@
                 mainView.style.display = 'none';
                 categoryView.style.display = 'block';
                 weatherView.style.display = 'none';
-                renderCategoryView();
+                renderAreaCategoryView();
             } else if (tab === 'weather') {
                 mainView.style.display = 'none';
                 categoryView.style.display = 'none';
@@ -972,24 +1065,28 @@
             renderDayTimeline();
         }
 
-        function renderCategoryView() {
-            const container = document.getElementById('category-list-container');
+        // 📍 渲染純地區分類檢索（含營業時間與直接外連 Redirect）
+        function renderAreaCategoryView() {
+            const container = document.getElementById('area-list-container');
             container.innerHTML = '';
 
-            categoriesData.forEach(cat => {
-                const catHeader = document.createElement('div');
-                catHeader.style.cssText = "font-size: 0.95rem; font-weight: 900; margin: 14px 0 8px 0; color: var(--coral-red); border-left: 4px solid var(--coral-red); padding-left: 8px;";
-                catHeader.innerText = cat.category;
-                container.appendChild(catHeader);
+            areaCategorizedData.forEach(sec => {
+                const titleEl = document.createElement('div');
+                titleEl.className = 'area-section-title';
+                titleEl.innerText = sec.areaName;
+                container.appendChild(titleEl);
 
-                cat.items.forEach(item => {
+                sec.items.forEach(item => {
                     const card = document.createElement('div');
-                    card.className = 'timeline-item';
-                    card.style.marginBottom = '8px';
+                    card.className = 'area-item-card';
                     card.innerHTML = `
-                        <span class="cat-tag">📍 ${item.loc}</span>
-                        <div class="item-title">${item.name}</div>
-                        <div class="item-desc">${item.desc}</div>
+                        <div class="area-item-header">
+                            <div class="area-item-title">${item.name}</div>
+                            <span class="hours-badge">⏰ ${item.hours}</span>
+                        </div>
+                        <div class="area-item-desc">${item.desc}</div>
+                        ${item.link ? `<a href="${item.link}" target="_blank" class="link-btn">🔗 開啟 IG / 官方連結 ↗</a>` : ''}
+                        ${item.extraLink ? `<a href="${item.extraLink}" target="_blank" class="link-btn" style="margin-left:4px;">🔗 備用連結 ↗</a>` : ''}
                     `;
                     container.appendChild(card);
                 });
