@@ -178,19 +178,34 @@
             border: 1px solid var(--coral-red);
         }
 
-        .copy-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 6px;
-            padding: 4px 8px;
-            background: #F0F0F0;
-            border: 1.5px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 0.72rem;
-            font-weight: 700;
+        .action-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .add-card-btn {
+            flex: 1;
+            padding: 8px;
+            background: var(--yamabuki-soft);
+            color: #7A5B00;
+            border: 2px dashed var(--yamabuki-yellow);
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 800;
             cursor: pointer;
-            color: var(--ink-black);
+            text-align: center;
+        }
+
+        .reset-btn {
+            padding: 8px 12px;
+            background: #FFF0F0;
+            color: #D93838;
+            border: 1.5px solid #D93838;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            cursor: pointer;
         }
 
         .timeline {
@@ -206,11 +221,6 @@
             padding: 12px;
             box-shadow: 3px 3px 0px var(--border-color);
             transition: transform 0.15s ease, box-shadow 0.15s ease;
-        }
-
-        .timeline-item.custom-note-item {
-            background: #FFFDF5;
-            border: 2px dashed var(--yamabuki-yellow);
         }
 
         .timeline-item.dragging {
@@ -250,8 +260,7 @@
             border-color: var(--coral-red);
         }
 
-        .time-badge {
-            display: inline-block;
+        .time-input {
             font-size: 0.72rem;
             font-weight: 800;
             padding: 2px 6px;
@@ -259,87 +268,56 @@
             color: var(--wakatake-green);
             border: 1px solid var(--wakatake-green);
             border-radius: 6px;
+            width: 75px;
+            outline: none;
         }
 
-        .custom-badge {
-            display: inline-block;
-            font-size: 0.72rem;
-            font-weight: 800;
-            padding: 2px 6px;
-            background: var(--yamabuki-soft);
-            color: var(--yamabuki-yellow);
-            border: 1px solid var(--yamabuki-yellow);
-            border-radius: 6px;
-        }
-
-        .item-title {
+        .editable-title {
+            width: 100%;
             font-size: 0.95rem;
             font-weight: 800;
             color: var(--ink-black);
+            border: 1px dashed transparent;
+            border-radius: 4px;
+            padding: 2px 4px;
+            outline: none;
+            margin-bottom: 2px;
         }
 
-        .item-desc {
+        .editable-title:focus {
+            border-color: var(--coral-red);
+            background: #FFFDF8;
+        }
+
+        .editable-desc {
+            width: 100%;
             font-size: 0.8rem;
             color: #555;
-            margin-top: 4px;
-            line-height: 1.4;
-        }
-
-        .custom-input-title {
-            width: 100%;
-            font-size: 0.9rem;
-            font-weight: 800;
-            border: 1px solid #DDD;
-            border-radius: 6px;
-            padding: 4px 6px;
-            margin-bottom: 4px;
-            outline: none;
-        }
-
-        .custom-input-desc {
-            width: 100%;
-            font-size: 0.78rem;
-            border: 1px solid #DDD;
-            border-radius: 6px;
-            padding: 4px 6px;
+            border: 1px dashed transparent;
+            border-radius: 4px;
+            padding: 2px 4px;
             outline: none;
             resize: none;
-            height: 42px;
+            line-height: 1.4;
+            height: 48px;
         }
 
-        .highlight-box {
-            background: #FFFCEB;
-            border: 1.5px dashed var(--yamabuki-yellow);
-            border-radius: 8px;
-            padding: 6px 8px;
-            margin-top: 6px;
-            font-size: 0.75rem;
-            color: #7A5B00;
-            font-weight: 700;
+        .editable-desc:focus {
+            border-color: var(--coral-red);
+            background: #FFFDF8;
         }
 
-        .transport-tag {
-            display: inline-block;
-            background: #F0F4F8;
-            color: #2B5B84;
-            border: 1px solid #B0C4DE;
-            border-radius: 6px;
+        .delete-card-btn {
+            font-size: 0.7rem;
+            color: #AAA;
+            cursor: pointer;
             padding: 2px 6px;
-            font-size: 0.72rem;
-            font-weight: 800;
-            margin-top: 4px;
+            border: none;
+            background: transparent;
         }
 
-        .cat-tag {
-            display: inline-block;
-            background: #F4EFEB;
-            color: #8C6D53;
-            border: 1px solid #D1C2B4;
-            border-radius: 6px;
-            padding: 2px 6px;
-            font-size: 0.72rem;
-            font-weight: 800;
-            margin-bottom: 4px;
+        .delete-card-btn:hover {
+            color: #D93838;
         }
 
         .remarks-section {
@@ -518,7 +496,12 @@
         <div class="info-card">
             <div class="card-header">
                 <span id="current-day-title">📅 DAY 1 · 11月1日 (日)</span>
-                <span class="hotel-tag">按住 ☰ 拖動可換位</span>
+                <span class="hotel-tag">點擊文字可編輯 · ☰ 可拖動</span>
+            </div>
+
+            <div class="action-bar">
+                <button class="add-card-btn" onclick="addNewCustomCard()">➕ 新增自訂行程卡片</button>
+                <button class="reset-btn" onclick="resetToDefaultData()">🔄 重置預設</button>
             </div>
 
             <div class="timeline" id="timeline-container"></div>
@@ -600,15 +583,13 @@
                         date: "11月1日 (日)",
                         title: "抵達首爾 & 弘大/延南洞食玩買專屬日",
                         items: [
-                            { id: "o1-1", time: "08:55", title: "香港起飛 (HX628)", desc: "搭乘香港航空 HX628 飛往首爾仁川機場。" },
-                            { id: "o1-2", time: "13:30", title: "抵達仁川國際機場 (ICN)", desc: "辦理入境、提取行李，搭乘 AREX 直通列車往市區。" },
-                            { id: "o1-3", time: "15:00", title: "Layer Hostel Check-in", desc: "辦理入住與寄放行李（與 Nic & Mum 酒店鄰近）。" },
-                            { id: "o1-4", time: "16:00", title: "🛍️ 延南洞 & 弘大選品家居地圖", desc: "逛延南洞雜貨 <b>오월상점</b>、<b>Modern House</b> 家居生活館，享用 <b>CHU PLUS</b> 炸吉拿棒、<b>beekend.seoul</b> 杜拜吐司！", transport: "🚇 地鐵 2號線 弘大入口站 3號出口" },
-                            { id: "o1-5", time: "18:30", title: "🍽️ 新村奶油燉排骨 (Sosinesso)", desc: "首爾超人氣濃郁奶油燉排骨！香濃滑順，配飯極致美味！" },
-                            { id: "o1-6", time: "20:30", title: "🍽️ 풀뜯는돼지 (水芹菜烤肉) / 우주집 (Woojujip)", desc: "續攤/備選：弘大水芹菜五花肉或韓式烤肉晚宴！" },
-                            { id: "o1-7", time: "22:00", title: "🧇 와플대학 鬆餅 & 60雞炸雞宵夜", desc: "外帶韓國經典平價鬆餅與 60雞招牌辣椒炸雞 (Gochu Chicken) 回酒店當宵夜！" },
-                            { id: "o1-c1", isCustom: true, title: "✏️ 自由自訂卡片 1", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." },
-                            { id: "o1-c2", isCustom: true, title: "✏️ 自由自訂卡片 2", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." }
+                            { time: "08:55", title: "香港起飛 (HX628)", desc: "搭乘香港航空 HX628 飛往首爾仁川機場。" },
+                            { time: "13:30", title: "抵達仁川國際機場 (ICN)", desc: "辦理入境、提取行李，搭乘 AREX 直通列車往市區。" },
+                            { time: "15:00", title: "Layer Hostel Check-in", desc: "辦理入住與寄放行李（與 Nic & Mum 酒店鄰近）。" },
+                            { time: "16:00", title: "🛍️ 延南洞 & 弘大選品家居地圖", desc: "逛延南洞雜貨 오월상점、Modern House 家居生活館，享用 CHU PLUS 炸吉拿棒、beekend.seoul 杜拜吐司！" },
+                            { time: "18:30", title: "🍽️ 新村奶油燉排骨 (Sosinesso)", desc: "首爾超人氣濃郁奶油燉排骨！香濃滑順，配飯極致美味！" },
+                            { time: "20:30", title: "🍽️ 풀뜯는돼지 (水芹菜烤肉) / 우주집 (Woojujip)", desc: "續攤/備選：弘大水芹菜五花肉或韓式烤肉晚宴！" },
+                            { time: "22:00", title: "🧇 와플대학 鬆餅 & 60雞炸雞宵夜", desc: "外帶韓國經典平價鬆餅與 60雞招牌辣椒炸雞 (Gochu Chicken) 回酒店當宵夜！" }
                         ]
                     },
                     {
@@ -616,15 +597,13 @@
                         date: "11月2日 (一)",
                         title: "🍁 和談林賞楓 ➔ 廣藏市場/鍾路 ➔ 明洞 ➔ 東大門",
                         items: [
-                            { id: "o2-1", time: "09:30", title: "🥐 朝早輕鬆 Brunch", desc: "酒店附近享用美味韓式咖啡與烘焙早午餐。" },
-                            { id: "o2-2", time: "12:00", title: "🚌 出發前往昆池岩和談林", desc: "搭地鐵京江線至昆池岩站，轉乘計程車/接駁車至和談林入口（車程預計 1.5–2 小時）。", highlight: "⚠️ 預先準備好 15:00 入場 QR Code 門票！" },
-                            { id: "o2-3", time: "15:00", title: "🍁 和談林 (Hwadam Botanic Garden) 賞楓", desc: "賞楓核心時間！乘搭單軌列車，漫步滿山紅葉木棧道公園。" },
-                            { id: "o2-4", time: "17:00", title: "🚌 返回首爾市區", desc: "搭車返回首爾市區廣藏市場/鍾路區。" },
-                            { id: "o2-5", time: "18:30", title: "🧵 廣藏市場 (棉被街 128號/156號) & nutceramic", desc: "直奔 128號、156號棉被店採購棉被；順道造訪鍾路區質感陶瓷選品店 <b>nutceramic_누트세라믹</b>！", highlight: "⚠️ 棉被店約 18:30–19:00 陸續關門，抵達後優先採購！" },
-                            { id: "o2-6", time: "20:00", title: "🛍️ 明洞商圈夜遊 & Creamchic 甜點 Cafe", desc: "逛明洞夜市小吃、樂天百貨，打卡質感法式甜點 Cafe <b>Creamchic (@creamchic_seoul)</b>！" },
-                            { id: "o2-7", time: "22:00", title: "🌙 東大門 DDP & 現代 Outlet 購物", desc: "深夜東大門批發商圈與 DDP 建築夜景巡禮。" },
-                            { id: "o2-c1", isCustom: true, title: "✏️ 自由自訂卡片 1", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." },
-                            { id: "o2-c2", isCustom: true, title: "✏️ 自由自訂卡片 2", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." }
+                            { time: "09:30", title: "🥐 朝早輕鬆 Brunch", desc: "酒店附近享用美味韓式咖啡與烘焙早午餐。" },
+                            { time: "12:00", title: "🚌 出發前往昆池岩和談林", desc: "搭地鐵京江線至昆池岩站，轉乘計程車/接駁車至和談林入口（車程預計 1.5–2 小時）。" },
+                            { time: "15:00", title: "🍁 和談林 (Hwadam Botanic Garden) 賞楓", desc: "賞楓核心時間！乘搭單軌列車，漫步滿山紅葉木棧道公園。" },
+                            { time: "17:00", title: "🚌 返回首爾市區", desc: "搭車返回首爾市區廣藏市場/鍾路區。" },
+                            { time: "18:30", title: "🧵 廣藏市場 (棉被街 128號/156號) & nutceramic", desc: "直奔 128號、156號棉被店採購棉被；順道造訪鍾路區質感陶瓷選品店 nutceramic_누트세라믹！" },
+                            { time: "20:00", title: "🛍️ 明洞商圈夜遊 & Creamchic 甜點 Cafe", desc: "逛明洞夜市小吃、樂天百貨，打卡質感法式甜點 Cafe Creamchic (@creamchic_seoul)！" },
+                            { time: "22:00", title: "🌙 東大門 DDP & 現代 Outlet 購物", desc: "深夜東大門批發商圈與 DDP 建築夜景巡禮。" }
                         ]
                     },
                     {
@@ -632,16 +611,14 @@
                         date: "11月3日 (二)",
                         title: "Check-out ➔ 聖水洞滿滿潮流地圖 ➔ 機場返港",
                         items: [
-                            { id: "o3-1", time: "10:00", title: "退房 Check-out & 寄存行李", desc: "在 Layer Hostel 辦理退房並將行李寄存在櫃檯。" },
-                            { id: "o3-2", time: "11:00", title: "🛍️ 聖水洞潮流選品 & 服飾大採購", desc: "逛 <b>Pola at home</b> 家品、<b>Folnua</b> 包款、<b>OOTJ Seongsu</b> 牛仔褲與潮流展演空間 <b>NOS Seongsu (@nos_seongsu)</b>！", transport: "🚇 地鐵 2號線 聖水站 (성수역) 3號出口" },
-                            { id: "o3-3", time: "12:30", title: "🍕 horno 오르노 Pizza / bd버거 / 聖水洞 SSOC", desc: "午餐精選：horno 手工 Pizza、bd burger 聖水超火漢堡，或 SSOC 意式小酒館！" },
-                            { id: "o3-4", time: "14:00", title: "☕ LOWIDE Bakery Cafe / 海例咖啡 / Haz Bakery", desc: "聖水洞必去 Cafe：<b>LOWIDE (@lowide.seoul)</b> 超人氣鹽可頌與貝果、<b>클래식 해례커피</b> 質感咖啡，或 <b>할매기름집</b> 煎餅！" },
-                            { id: "o3-5", time: "16:30", title: "明洞/市廳最後補貨", desc: "返回市區進行 Olive Young 與伴手禮最後採購。" },
-                            { id: "o3-6", time: "18:30", title: "🎒 返回酒店取行李 ➔ 仁川機場", desc: "搭 AREX 直通列車前往仁川機場第一航廈。" },
-                            { id: "o3-7", time: "21:00", title: "機場 Check-in & 入境辦理", desc: "辦理登機手續、退稅與機場免稅店最後採購。" },
-                            { id: "o3-8", time: "00:05", title: "✈️ HX625 飛往香港 (11/4 凌晨)", desc: "搭乘 HX625 (00:05 起飛) 順利返抵香港！" },
-                            { id: "o3-c1", isCustom: true, title: "✏️ 自由自訂卡片 1", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." },
-                            { id: "o3-c2", isCustom: true, title: "✏️ 自由自訂卡片 2", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." }
+                            { time: "10:00", title: "退房 Check-out & 寄存行李", desc: "在 Layer Hostel 辦理退房並將行李寄存在櫃檯。" },
+                            { time: "11:00", title: "🛍️ 聖水洞潮流選品 & 服飾大採購", desc: "逛 Pola at home 家品、Folnua 包款、OOTJ Seongsu 牛仔褲與潮流展演空間 NOS Seongsu (@nos_seongsu)！" },
+                            { time: "12:30", title: "🍕 horno 오르노 Pizza / bd버거 / 聖水洞 SSOC", desc: "午餐精選：horno 手工 Pizza、bd burger 聖水超火漢堡，或 SSOC 意式小酒館！" },
+                            { time: "14:00", title: "☕ LOWIDE Bakery Cafe / 海例咖啡 / Haz Bakery", desc: "聖水洞必去 Cafe：LOWIDE (@lowide.seoul) 超人氣鹽可頌與貝果、클래식 해례커피 質感咖啡，或 할매기름집 煎餅！" },
+                            { time: "16:30", title: "明洞/市廳最後補貨", desc: "返回市區進行 Olive Young 與伴手禮最後採購。" },
+                            { time: "18:30", title: "🎒 返回酒店取行李 ➔ 仁川機場", desc: "搭 AREX 直通列車前往仁川機場第一航廈。" },
+                            { time: "21:00", title: "機場 Check-in & 入境辦理", desc: "辦理登機手續、退稅與機場免稅店最後採購。" },
+                            { time: "00:05", title: "✈️ HX625 飛往香港 (11/4 凌晨)", desc: "搭乘 HX625 (00:05 起飛) 順利返抵香港！" }
                         ]
                     }
                 ]
@@ -658,13 +635,11 @@
                         date: "11月1日 (日)",
                         title: "抵達首爾 & 弘大/延南洞食玩買",
                         items: [
-                            { id: "m1-1", time: "08:55", title: "香港起飛 (HX628)", desc: "搭乘 HX628 飛往首爾仁川機場。" },
-                            { id: "m1-2", time: "13:30", title: "抵達仁川國際機場 (ICN)", desc: "辦理入境、提取行李，前往酒店 Check-in。" },
-                            { id: "m1-3", time: "16:00", title: "🛍️ 延南洞 & Modern House 家居雜貨", desc: "逛 <b>오월상점</b> 雜貨、<b>Modern House</b> 大型家居選品館，享用 <b>CHU PLUS</b> 炸吉拿棒。" },
-                            { id: "m1-4", time: "18:30", title: "🍽️ 新村奶油燉排骨 (Sosinesso)", desc: "享用超人氣濃郁奶油燉排骨！" },
-                            { id: "m1-5", time: "21:30", title: "🧇 와플대학 鬆餅 & 60雞炸雞宵夜", desc: "外賣品嚐招牌辣椒炸雞與平價鬆餅。" },
-                            { id: "m1-c1", isCustom: true, title: "✏️ 自由自訂卡片 1", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." },
-                            { id: "m1-c2", isCustom: true, title: "✏️ 自由自訂卡片 2", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." }
+                            { time: "08:55", title: "香港起飛 (HX628)", desc: "搭乘 HX628 飛往首爾仁川機場。" },
+                            { time: "13:30", title: "抵達仁川國際機場 (ICN)", desc: "辦理入境、提取行李，前往酒店 Check-in。" },
+                            { time: "16:00", title: "🛍️ 延南洞 & Modern House 家居雜貨", desc: "逛 오월상점 雜貨、Modern House 大型家居選品館，享用 CHU PLUS 炸吉拿棒。" },
+                            { time: "18:30", title: "🍽️ 新村奶油燉排骨 (Sosinesso)", desc: "享用超人氣濃郁奶油燉排骨！" },
+                            { time: "21:30", title: "🧇 와플대학 鬆餅 & 60雞炸雞宵夜", desc: "外賣品嚐招牌辣椒炸雞與平價鬆餅。" }
                         ]
                     },
                     {
@@ -672,13 +647,11 @@
                         date: "11月2日 (一)",
                         title: "🍁 和談林賞楓 ➔ 廣藏市場/鍾路 ➔ 明洞 ➔ 東大門",
                         items: [
-                            { id: "m2-1", time: "09:30", title: "朝早 Brunch 享用", desc: "享用韓式精緻早午餐。" },
-                            { id: "m2-2", time: "12:00", title: "前往昆池岩和談林", desc: "搭車前往昆池岩和談林。" },
-                            { id: "m2-3", time: "15:00", title: "🍁 和談林賞楓 (15:00 入場)", desc: "觀賞紅葉與搭乘單軌列車。" },
-                            { id: "m2-4", time: "18:30", title: "🧵 廣藏市場 128號/156號棉被 & nutceramic", desc: "選購優質韓國傳統棉被，並逛鍾路區質感陶瓷選品店 <b>nutceramic</b>！" },
-                            { id: "m2-5", time: "20:00", title: "明洞夜市 & Creamchic 甜點 Cafe", desc: "體驗熱鬧夜市與 <b>Creamchic (@creamchic_seoul)</b> 質感法式甜點。" },
-                            { id: "m2-c1", isCustom: true, title: "✏️ 自由自訂卡片 1", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." },
-                            { id: "m2-c2", isCustom: true, title: "✏️ 自由自訂卡片 2", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." }
+                            { time: "09:30", title: "朝早 Brunch 享用", desc: "享用韓式精緻早午餐。" },
+                            { time: "12:00", title: "前往昆池岩和談林", desc: "搭車前往昆池岩和談林。" },
+                            { time: "15:00", title: "🍁 和談林賞楓 (15:00 入場)", desc: "觀賞紅葉與搭乘單軌列車。" },
+                            { time: "18:30", title: "🧵 廣藏市場 128號/156號棉被 & nutceramic", desc: "選購優質韓國傳統棉被，並逛鍾路區質感陶瓷選品店 nutceramic！" },
+                            { time: "20:00", title: "明洞夜市 & Creamchic 甜點 Cafe", desc: "體驗熱鬧夜市與 Creamchic (@creamchic_seoul) 質感法式甜點。" }
                         ]
                     },
                     {
@@ -686,11 +659,9 @@
                         date: "11月3日 (二)",
                         title: "聖水洞潮流地圖 (Pola + LOWIDE + NOS + Folnua)",
                         items: [
-                            { id: "m3-1", time: "11:00", title: "🛍️ 聖水洞 Pola at home, OOTJ & NOS Seongsu", desc: "選購韓系陶瓷餐具、OOTJ 牛仔褲與 <b>NOS Seongsu</b> 潮流選品展演空間。" },
-                            { id: "m3-2", time: "12:30", title: "🍕 horno Pizza / bd버거 / SSOC 午餐", desc: "品嚐聖水洞精緻手工 Pizza 或美式漢堡。" },
-                            { id: "m3-3", time: "14:00", title: "☕ LOWIDE Bakery Cafe (@lowide.seoul)", desc: "打卡聖水洞人氣 <b>LOWIDE</b> 享用爆款鹽可頌、貝果與精品咖啡！" },
-                            { id: "m3-c1", isCustom: true, title: "✏️ 自由自訂卡片 1", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." },
-                            { id: "m3-c2", isCustom: true, title: "✏️ 自由自訂卡片 2", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." }
+                            { time: "11:00", title: "🛍️ 聖水洞 Pola at home, OOTJ & NOS Seongsu", desc: "選購韓系陶瓷餐具、OOTJ 牛仔褲與 NOS Seongsu 潮流選品展演空間。" },
+                            { time: "12:30", title: "🍕 horno Pizza / bd버거 / SSOC 午餐", desc: "品嚐聖水洞精緻手工 Pizza 或美式漢堡。" },
+                            { time: "14:00", title: "☕ LOWIDE Bakery Cafe (@lowide.seoul)", desc: "打卡聖水洞人氣 LOWIDE 享用爆款鹽可頌、貝果與精品咖啡！" }
                         ]
                     },
                     {
@@ -698,11 +669,9 @@
                         date: "11月4日 (三)",
                         title: "景福宮韓服 & 三清洞安國 ➔ 合井 O Bagel House",
                         items: [
-                            { id: "m4-1", time: "10:00", title: "景福宮賞楓 & 韓服體驗", desc: "穿著韓國傳統韓服在古宮紅葉下打卡拍照。" },
-                            { id: "m4-2", time: "13:00", title: "土俗村參雞湯", desc: "品嚐首爾最受歡迎的濃郁人蔘雞湯。" },
-                            { id: "m4-3", time: "15:30", title: "📌 O Bagel House (오베이글 하우스)", desc: "前往合井洞打卡超高人氣質感貝果專賣店！", transport: "📍 麻浦區合井洞 431-21 (10:00-19:00)" },
-                            { id: "m4-c1", isCustom: true, title: "✏️ 自由自訂卡片 1", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." },
-                            { id: "m4-c2", isCustom: true, title: "✏️ 自由自訂卡片 2", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." }
+                            { time: "10:00", title: "景福宮賞楓 & 韓服體驗", desc: "穿著韓國傳統韓服在古宮紅葉下打卡拍照。" },
+                            { time: "13:00", title: "土俗村參雞湯", desc: "品嚐首爾最受歡迎的濃郁人蔘雞湯。" },
+                            { time: "15:30", title: "📌 O Bagel House (오베이글 하우스)", desc: "前往合井洞打卡超高人氣質感貝果專賣店！" }
                         ]
                     },
                     {
@@ -710,12 +679,10 @@
                         date: "11月5日 (四)",
                         title: "🔥 江南 chizn.kr 必去！➔ 現代百貨 & 星空圖書館",
                         items: [
-                            { id: "m5-1", time: "11:00", title: "🔥 chizn.kr (Gangnam - MUST GO!)", desc: "江南超級打卡地標與火爆特色必去店！", highlight: "🌟 MUST GO 必去亮點！" },
-                            { id: "m5-2", time: "13:30", title: "📍 투아투아 (Tour a Tour) 新沙洞 Brunch", desc: "新沙洞極具質感的 Sourdough 酸麵包早午餐店！", transport: "📍 江南區新沙洞 642-15" },
-                            { id: "m5-3", time: "16:00", title: "COEX 星空圖書館 (Starfield Library)", desc: "打卡宏偉的巨型書架與地下商圈。" },
-                            { id: "m5-4", time: "19:00", title: "首爾塔夜景", desc: "乘搭纜車登上 N 首爾塔觀賞首爾璀璨夜景。" },
-                            { id: "m5-c1", isCustom: true, title: "✏️ 自由自訂卡片 1", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." },
-                            { id: "m5-c2", isCustom: true, title: "✏️ 自由自訂卡片 2", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." }
+                            { time: "11:00", title: "🔥 chizn.kr (Gangnam - MUST GO!)", desc: "江南超級打卡地標與火爆特色必去店！" },
+                            { time: "13:30", title: "📍 투아투아 (Tour a Tour) 新沙洞 Brunch", desc: "新沙洞極具質感的 Sourdough 酸麵包早午餐店！" },
+                            { time: "16:00", title: "COEX 星空圖書館 (Starfield Library)", desc: "打卡宏偉的巨型書架與地下商圈。" },
+                            { time: "19:00", title: "首爾塔夜景", desc: "乘搭纜車登上 N 首爾塔觀賞首爾璀璨夜景。" }
                         ]
                     },
                     {
@@ -723,11 +690,9 @@
                         date: "11月6日 (五)",
                         title: "漢南洞 AVEK CHERI ➔ 樂天超市採購",
                         items: [
-                            { id: "m6-1", time: "10:30", title: "☕ AVEK CHERI 아벡쉐리 (Hannam)", desc: "漫步漢南洞質感街道，享用浪漫法式烘焙 Cafe。" },
-                            { id: "m6-2", time: "14:00", title: "首爾站樂天超市 (Lotte Mart)", desc: "採購韓國零食、紫菜、拉麵與伴手禮 (提供現場打包服務)。" },
-                            { id: "m6-3", time: "18:00", title: "明洞樂天百貨 & 精緻韓式燒肉", desc: "最後補貨與享用豐盛燒肉晚宴。" },
-                            { id: "m6-c1", isCustom: true, title: "✏️ 自由自訂卡片 1", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." },
-                            { id: "m6-c2", isCustom: true, title: "✏️ 自由自訂卡片 2", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." }
+                            { time: "10:30", title: "☕ AVEK CHERI 아벡쉐리 (Hannam)", desc: "漫步漢南洞質感街道，享用浪漫法式烘焙 Cafe。" },
+                            { time: "14:00", title: "首爾站樂天超市 (Lotte Mart)", desc: "採購韓國零食、紫菜、拉麵與伴手禮 (提供現場打包服務)。" },
+                            { time: "18:00", title: "明洞樂天百貨 & 精緻韓式燒肉", desc: "最後補貨與享用豐盛燒肉晚宴。" }
                         ]
                     },
                     {
@@ -735,10 +700,8 @@
                         date: "11月7日 (六)",
                         title: "輕鬆退房 & 返港",
                         items: [
-                            { id: "m7-1", time: "08:30", title: "酒店 Check-out & 前往機場", desc: "乘搭機場巴士或 AREX 前往仁川機場。" },
-                            { id: "m7-2", time: "12:00", title: "乘搭 HX629 返港", desc: "滿載而歸，順利返抵香港！" },
-                            { id: "m7-c1", isCustom: true, title: "✏️ 自由自訂卡片 1", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." },
-                            { id: "m7-c2", isCustom: true, title: "✏️ 自由自訂卡片 2", desc: "按此輸入你想加入的備用景點/餐廳/購物點..." }
+                            { time: "08:30", title: "酒店 Check-out & 前往機場", desc: "乘搭機場巴士或 AREX 前往仁川機場。" },
+                            { time: "12:00", title: "乘搭 HX629 返港", desc: "滿載而歸，順利返抵香港！" }
                         ]
                     }
                 ]
@@ -796,7 +759,7 @@
             }
         ];
 
-        let tripData = JSON.parse(localStorage.getItem('seoul_custom_itinerary')) || initialTripData;
+        let tripData = JSON.parse(localStorage.getItem('seoul_custom_itinerary_v2')) || initialTripData;
         let currentTab = 'oscar';
         let currentDayIndex = 0;
 
@@ -883,30 +846,20 @@
 
             dayData.items.forEach((item, index) => {
                 const itemEl = document.createElement('div');
-                itemEl.className = `timeline-item ${item.isCustom ? 'custom-note-item' : ''}`;
+                itemEl.className = 'timeline-item';
                 itemEl.dataset.index = index;
 
-                if (item.isCustom) {
-                    itemEl.innerHTML = `
-                        <div class="card-top-bar">
-                            <span class="custom-badge">✏️ 自訂筆記卡片</span>
+                itemEl.innerHTML = `
+                    <div class="card-top-bar">
+                        <input type="text" class="time-input" value="${item.time || '⏰ 時間'}" onchange="updateCardField(${index}, 'time', this.value)">
+                        <div>
+                            <button class="delete-card-btn" onclick="deleteCard(${index})">🗑️ 刪除</button>
                             <div class="drag-handle-btn">☰ 拖動</div>
                         </div>
-                        <input type="text" class="custom-input-title" value="${item.title}" placeholder="標題 (例如: 想去嘅 Cafe)..." oninput="updateCustomCard(${index}, 'title', this.value)">
-                        <textarea class="custom-input-desc" placeholder="詳細筆記或地址..." oninput="updateCustomCard(${index}, 'desc', this.value)">${item.desc}</textarea>
-                    `;
-                } else {
-                    itemEl.innerHTML = `
-                        <div class="card-top-bar">
-                            <span class="time-badge">⏰ ${item.time}</span>
-                            <div class="drag-handle-btn">☰ 拖動</div>
-                        </div>
-                        <div class="item-title">${item.title}</div>
-                        <div class="item-desc">${item.desc}</div>
-                        ${item.transport ? `<div class="transport-tag">${item.transport}</div>` : ''}
-                        ${item.highlight ? `<div class="highlight-box">${item.highlight}</div>` : ''}
-                    `;
-                }
+                    </div>
+                    <input type="text" class="editable-title" value="${item.title || ''}" placeholder="按此輸入景點/餐廳名稱..." onchange="updateCardField(${index}, 'title', this.value)">
+                    <textarea class="editable-desc" placeholder="按此輸入詳細筆記/地址..." onchange="updateCardField(${index}, 'desc', this.value)">${item.desc || ''}</textarea>
+                `;
                 container.appendChild(itemEl);
             });
 
@@ -914,9 +867,41 @@
             loadRemarks();
         }
 
-        function updateCustomCard(index, field, value) {
+        function updateCardField(index, field, value) {
             tripData[currentTab].days[currentDayIndex].items[index][field] = value;
-            localStorage.setItem('seoul_custom_itinerary', JSON.stringify(tripData));
+            saveTripDataToStorage();
+        }
+
+        function addNewCustomCard() {
+            const newCard = {
+                time: "15:00",
+                title: "✏️ 自訂新景點 / 餐廳",
+                desc: "點擊此處輸入詳細資料或地址..."
+            };
+            tripData[currentTab].days[currentDayIndex].items.push(newCard);
+            saveTripDataToStorage();
+            renderDayTimeline();
+        }
+
+        function deleteCard(index) {
+            if (confirm('確定要刪除這張行程卡片嗎？')) {
+                tripData[currentTab].days[currentDayIndex].items.splice(index, 1);
+                saveTripDataToStorage();
+                renderDayTimeline();
+            }
+        }
+
+        function resetToDefaultData() {
+            if (confirm('確定要還原為官方預設行程嗎？所有自行修改的卡片將會重置。')) {
+                localStorage.removeItem('seoul_custom_itinerary_v2');
+                tripData = JSON.parse(JSON.stringify(initialTripData));
+                saveTripDataToStorage();
+                renderDayTimeline();
+            }
+        }
+
+        function saveTripDataToStorage() {
+            localStorage.setItem('seoul_custom_itinerary_v2', JSON.stringify(tripData));
         }
 
         function enableMobileTouchDrag() {
@@ -925,11 +910,9 @@
 
             handles.forEach(handle => {
                 let card = handle.closest('.timeline-item');
-                let touchStartY = 0;
                 let isDragging = false;
 
                 handle.addEventListener('touchstart', function (e) {
-                    touchStartY = e.touches[0].clientY;
                     isDragging = true;
                     card.classList.add('dragging');
                     if (navigator.vibrate) navigator.vibrate(20);
@@ -979,11 +962,13 @@
 
             itemElements.forEach(el => {
                 const oldIndex = parseInt(el.dataset.index);
-                newItemsOrder.push(currentItems[oldIndex]);
+                if (currentItems[oldIndex]) {
+                    newItemsOrder.push(currentItems[oldIndex]);
+                }
             });
 
             tripData[currentTab].days[currentDayIndex].items = newItemsOrder;
-            localStorage.setItem('seoul_custom_itinerary', JSON.stringify(tripData));
+            saveTripDataToStorage();
             renderDayTimeline();
         }
 
@@ -1097,3 +1082,4 @@
     </script>
 </body>
 </html>
+
