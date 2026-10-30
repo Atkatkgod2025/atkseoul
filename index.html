@@ -73,7 +73,8 @@
         }
 
         .traveler-selector {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             background: #EFECE6;
             border: 2px solid var(--border-color);
             border-radius: 14px;
@@ -83,16 +84,16 @@
         }
 
         .tab-btn {
-            flex: 1;
             padding: 8px 4px;
             border: none;
             border-radius: 10px;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.2s ease;
             color: #666;
             background: transparent;
+            text-align: center;
         }
 
         .tab-btn.active {
@@ -192,42 +193,44 @@
             color: var(--ink-black);
         }
 
+        /* 拖拽行程時間軸樣式 */
         .timeline {
             position: relative;
-            padding-left: 20px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 6px;
-            top: 10px;
-            bottom: 10px;
-            width: 3px;
-            background: var(--border-color);
-            border-radius: 2px;
         }
 
         .timeline-item {
             position: relative;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             background: var(--card-bg);
             border: 2px solid var(--border-color);
             border-radius: 14px;
-            padding: 12px;
+            padding: 12px 12px 12px 38px;
             box-shadow: 3px 3px 0px var(--border-color);
+            cursor: grab;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            touch-action: manipulation;
         }
 
-        .timeline-item::before {
-            content: '';
+        .timeline-item:active {
+            cursor: grabbing;
+        }
+
+        .timeline-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.98);
+            border: 2.5px dashed var(--coral-red);
+        }
+
+        /* 拖拽手柄圖示 */
+        .drag-handle {
             position: absolute;
-            left: -20px;
-            top: 16px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--yamabuki-yellow);
-            border: 2px solid var(--border-color);
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            color: #A0A0A0;
+            cursor: grab;
+            user-select: none;
         }
 
         .time-badge {
@@ -276,6 +279,18 @@
             font-size: 0.72rem;
             font-weight: 800;
             margin-top: 4px;
+        }
+
+        .cat-tag {
+            display: inline-block;
+            background: #F4EFEB;
+            color: #8C6D53;
+            border: 1px solid #D1C2B4;
+            border-radius: 6px;
+            padding: 2px 6px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            margin-bottom: 4px;
         }
 
         .remarks-section {
@@ -428,6 +443,7 @@
         <div class="traveler-selector">
             <button class="tab-btn active" id="btn-oscar" onclick="switchTab('oscar')">Oscar (11/1-11/4)</button>
             <button class="tab-btn" id="btn-mum" onclick="switchTab('mum')">Nic & Mum (11/1-11/7)</button>
+            <button class="tab-btn" id="btn-category" onclick="switchTab('category')">🗂️ 店家/景點分類</button>
             <button class="tab-btn" id="btn-weather" onclick="switchTab('weather')">☀️ 實時氣候</button>
         </div>
     </header>
@@ -453,7 +469,7 @@
         <div class="info-card">
             <div class="card-header">
                 <span id="current-day-title">📅 DAY 1 · 11月1日 (日)</span>
-                <span class="hotel-tag" id="current-day-tag">抵達首爾 & 弘大/延南洞選品美食</span>
+                <span class="hotel-tag" id="current-day-tag">長按卡片 ☰ 圖示拖拽換位</span>
             </div>
 
             <div class="timeline" id="timeline-container"></div>
@@ -478,6 +494,17 @@
                 <div class="checklist-item"><input type="checkbox" id="c4"><label for="c4">Modern House 韓國生活家居雜貨大採購</label></div>
                 <div class="checklist-item"><input type="checkbox" id="c5"><label for="c5">Creamchic 明洞質感甜點 Cafe</label></div>
             </div>
+        </div>
+    </div>
+
+    <!-- 全景點與店家分類檢索 Tab -->
+    <div id="category-view" style="display: none;">
+        <div class="info-card">
+            <div class="card-header">
+                <span>🗂️ 首爾精選店家/餐廳分類清單</span>
+                <span class="hotel-tag">清單總覽</span>
+            </div>
+            <div id="category-list-container"></div>
         </div>
     </div>
 
@@ -511,7 +538,7 @@
     </footer>
 
     <script>
-        const tripData = {
+        const initialTripData = {
             oscar: {
                 subtitle: "2026.11.01 – 2026.11.04 (3日2夜快閃)",
                 flight: "HX628 (13:30抵達) / HX625 (00:05起飛)",
@@ -524,13 +551,13 @@
                         date: "11月1日 (日)",
                         title: "抵達首爾 & 弘大/延南洞食玩買專屬日",
                         items: [
-                            { time: "08:55", title: "香港起飛 (HX628)", desc: "搭乘香港航空 HX628 飛往首爾仁川機場。" },
-                            { time: "13:30", title: "抵達仁川國際機場 (ICN)", desc: "辦理入境、提取行李，搭乘 AREX 直通列車往市區。" },
-                            { time: "15:00", title: "Layer Hostel Check-in", desc: "辦理入住與寄放行李（與 Nic & Mum 酒店鄰近）。" },
-                            { time: "16:00", title: "🛍️ 延南洞 & 弘大選品家居地圖", desc: "逛延南洞雜貨 <b>오월상점</b>、<b>Modern House (모던하우스)</b> 家居生活館，享用 <b>CHU PLUS</b> 炸吉拿棒、<b>beekend.seoul</b> 杜拜吐司！", transport: "🚇 地鐵 2號線 弘大入口站 3號出口" },
-                            { time: "18:30", title: "🍽️ 新村奶油燉排骨 (Sosinesso)", desc: "首爾超人氣濃郁奶油燉排骨！香濃滑順，配飯極致美味！" },
-                            { time: "20:30", title: "🍽️ 풀뜯는돼지 (水芹菜烤肉) / 우주집 (Woojujip)", desc: "續攤/備選：弘大水芹菜五花肉或韓式烤肉晚宴！" },
-                            { time: "22:00", title: "🧇 와플대학 鬆餅 & 60雞炸雞宵夜", desc: "外帶韓國經典平價鬆餅與 60雞招牌辣椒炸雞 (Gochu Chicken) 回酒店當宵夜！" }
+                            { id: "o1-1", time: "08:55", title: "香港起飛 (HX628)", desc: "搭乘香港航空 HX628 飛往首爾仁川機場。" },
+                            { id: "o1-2", time: "13:30", title: "抵達仁川國際機場 (ICN)", desc: "辦理入境、提取行李，搭乘 AREX 直通列車往市區。" },
+                            { id: "o1-3", time: "15:00", title: "Layer Hostel Check-in", desc: "辦理入住與寄放行李（與 Nic & Mum 酒店鄰近）。" },
+                            { id: "o1-4", time: "16:00", title: "🛍️ 延南洞 & 弘大選品家居地圖", desc: "逛延南洞雜貨 <b>오월상점</b>、<b>Modern House</b> 家居生活館，享用 <b>CHU PLUS</b> 炸吉拿棒、<b>beekend.seoul</b> 杜拜吐司！", transport: "🚇 地鐵 2號線 弘大入口站 3號出口" },
+                            { id: "o1-5", time: "18:30", title: "🍽️ 新村奶油燉排骨 (Sosinesso)", desc: "首爾超人氣濃郁奶油燉排骨！香濃滑順，配飯極致美味！" },
+                            { id: "o1-6", time: "20:30", title: "🍽️ 풀뜯는돼지 (水芹菜烤肉) / 우주집 (Woojujip)", desc: "續攤/備選：弘大水芹菜五花肉或韓式烤肉晚宴！" },
+                            { id: "o1-7", time: "22:00", title: "🧇 와플대학 鬆餅 & 60雞炸雞宵夜", desc: "外帶韓國經典平價鬆餅與 60雞招牌辣椒炸雞 (Gochu Chicken) 回酒店當宵夜！" }
                         ]
                     },
                     {
@@ -538,13 +565,13 @@
                         date: "11月2日 (一)",
                         title: "🍁 和談林賞楓 ➔ 廣藏市場/鍾路 ➔ 明洞 ➔ 東大門",
                         items: [
-                            { time: "09:30", title: "🥐 朝早輕鬆 Brunch", desc: "酒店附近享用美味韓式咖啡與烘焙早午餐。" },
-                            { time: "12:00", title: "🚌 出發前往昆池岩和談林", desc: "搭地鐵京江線至昆池岩站，轉乘計程車/接駁車至和談林入口（車程預計 1.5–2 小時）。", highlight: "⚠️ 預先準備好 15:00 入場 QR Code 門票！" },
-                            { time: "15:00", title: "🍁 和談林 (Hwadam Botanic Garden) 賞楓", desc: "賞楓核心時間！乘搭單軌列車，漫步滿山紅葉木棧道公園。" },
-                            { time: "17:00", title: "🚌 返回首爾市區", desc: "搭車返回首爾市區廣藏市場/鍾路區。" },
-                            { time: "18:30", title: "🧵 廣藏市場 (棉被街 128號/156號) & nutceramic", desc: "直奔 128號、156號棉被店採購棉被；順道造訪鍾路區質感陶瓷選品店 <b>nutceramic_누트세라믹</b>！", highlight: "⚠️ 棉被店約 18:30–19:00 陸續關門，抵達後優先採購！" },
-                            { time: "20:00", title: "🛍️ 明洞商圈夜遊 & Creamchic 甜點 Cafe", desc: "逛明洞夜市小吃、樂天百貨，打卡質感法式甜點 Cafe <b>Creamchic (@creamchic_seoul)</b>！" },
-                            { time: "22:00", title: "🌙 東大門 DDP & 現代 Outlet 購物", desc: "深夜東大門批發商圈與 DDP 建築夜景巡禮。" }
+                            { id: "o2-1", time: "09:30", title: "🥐 朝早輕鬆 Brunch", desc: "酒店附近享用美味韓式咖啡與烘焙早午餐。" },
+                            { id: "o2-2", time: "12:00", title: "🚌 出發前往昆池岩和談林", desc: "搭地鐵京江線至昆池岩站，轉乘計程車/接駁車至和談林入口（車程預計 1.5–2 小時）。", highlight: "⚠️ 預先準備好 15:00 入場 QR Code 門票！" },
+                            { id: "o2-3", time: "15:00", title: "🍁 和談林 (Hwadam Botanic Garden) 賞楓", desc: "賞楓核心時間！乘搭單軌列車，漫步滿山紅葉木棧道公園。" },
+                            { id: "o2-4", time: "17:00", title: "🚌 返回首爾市區", desc: "搭車返回首爾市區廣藏市場/鍾路區。" },
+                            { id: "o2-5", time: "18:30", title: "🧵 廣藏市場 (棉被街 128號/156號) & nutceramic", desc: "直奔 128號、156號棉被店採購棉被；順道造訪鍾路區質感陶瓷選品店 <b>nutceramic_누트세라믹</b>！", highlight: "⚠️ 棉被店約 18:30–19:00 陸續關門，抵達後優先採購！" },
+                            { id: "o2-6", time: "20:00", title: "🛍️ 明洞商圈夜遊 & Creamchic 甜點 Cafe", desc: "逛明洞夜市小吃、樂天百貨，打卡質感法式甜點 Cafe <b>Creamchic (@creamchic_seoul)</b>！" },
+                            { id: "o2-7", time: "22:00", title: "🌙 東大門 DDP & 現代 Outlet 購物", desc: "深夜東大門批發商圈與 DDP 建築夜景巡禮。" }
                         ]
                     },
                     {
@@ -552,14 +579,14 @@
                         date: "11月3日 (二)",
                         title: "Check-out ➔ 聖水洞滿滿潮流地圖 ➔ 機場返港",
                         items: [
-                            { time: "10:00", title: "退房 Check-out & 寄存行李", desc: "在 Layer Hostel 辦理退房並將行李寄存在櫃檯。" },
-                            { time: "11:00", title: "🛍️ 聖水洞潮流選品 & 服飾大採購", desc: "逛 <b>Pola at home</b> 家品、<b>Folnua</b> 包款、<b>OOTJ Seongsu</b> 牛仔褲與潮流展演空間 <b>NOS Seongsu (@nos_seongsu)</b>！", transport: "🚇 地鐵 2號線 聖水站 (성수역) 3號出口" },
-                            { time: "12:30", title: "🍕 horno 오르노 Pizza / bd버거 / 聖水洞 SSOC", desc: "午餐精選：horno 手工 Pizza、bd burger 聖水超火漢堡，或 SSOC 意式小酒館！" },
-                            { time: "14:00", title: "☕ LOWIDE Bakery Cafe / 海例咖啡 / Haz Bakery", desc: "聖水洞必去 Cafe：<b>LOWIDE (@lowide.seoul)</b> 超人氣鹽可頌與貝果、<b>클래식 해례커피</b> 質感咖啡，或 <b>할매기름집</b> 煎餅！" },
-                            { time: "16:30", title: "明洞/市廳最後補貨", desc: "返回市區進行 Olive Young 與伴手禮最後採購。" },
-                            { time: "18:30", title: "🎒 返回酒店取行李 ➔ 仁川機場", desc: "搭 AREX 直通列車前往仁川機場第一航廈。" },
-                            { time: "21:00", title: "機場 Check-in & 入境辦理", desc: "辦理登機手續、退稅與機場免稅店最後採購。" },
-                            { time: "00:05", title: "✈️ HX625 飛往香港 (11/4 凌晨)", desc: "搭乘 HX625 (00:05 起飛) 順利返抵香港！" }
+                            { id: "o3-1", time: "10:00", title: "退房 Check-out & 寄存行李", desc: "在 Layer Hostel 辦理退房並將行李寄存在櫃檯。" },
+                            { id: "o3-2", time: "11:00", title: "🛍️ 聖水洞潮流選品 & 服飾大採購", desc: "逛 <b>Pola at home</b> 家品、<b>Folnua</b> 包款、<b>OOTJ Seongsu</b> 牛仔褲與潮流展演空間 <b>NOS Seongsu (@nos_seongsu)</b>！", transport: "🚇 地鐵 2號線 聖水站 (성수역) 3號出口" },
+                            { id: "o3-3", time: "12:30", title: "🍕 horno 오르노 Pizza / bd버거 / 聖水洞 SSOC", desc: "午餐精選：horno 手工 Pizza、bd burger 聖水超火漢堡，或 SSOC 意式小酒館！" },
+                            { id: "o3-4", time: "14:00", title: "☕ LOWIDE Bakery Cafe / 海例咖啡 / Haz Bakery", desc: "聖水洞必去 Cafe：<b>LOWIDE (@lowide.seoul)</b> 超人氣鹽可頌與貝果、<b>클래식 해례커피</b> 質感咖啡，或 <b>할매기름집</b> 煎餅！" },
+                            { id: "o3-5", time: "16:30", title: "明洞/市廳最後補貨", desc: "返回市區進行 Olive Young 與伴手禮最後採購。" },
+                            { id: "o3-6", time: "18:30", title: "🎒 返回酒店取行李 ➔ 仁川機場", desc: "搭 AREX 直通列車前往仁川機場第一航廈。" },
+                            { id: "o3-7", time: "21:00", title: "機場 Check-in & 入境辦理", desc: "辦理登機手續、退稅與機場免稅店最後採購。" },
+                            { id: "o3-8", time: "00:05", title: "✈️ HX625 飛往香港 (11/4 凌晨)", desc: "搭乘 HX625 (00:05 起飛) 順利返抵香港！" }
                         ]
                     }
                 ]
@@ -576,11 +603,11 @@
                         date: "11月1日 (日)",
                         title: "抵達首爾 & 弘大/延南洞食玩買",
                         items: [
-                            { time: "08:55", title: "香港起飛 (HX628)", desc: "搭乘 HX628 飛往首爾仁川機場。" },
-                            { time: "13:30", title: "抵達仁川國際機場 (ICN)", desc: "辦理入境、提取行李，前往酒店 Check-in。" },
-                            { time: "16:00", title: "🛍️ 延南洞 & Modern House 家居雜貨", desc: "逛 <b>오월상점</b> 雜貨、<b>Modern House</b> 大型家居選品館，享用 <b>CHU PLUS</b> 炸吉拿棒。" },
-                            { time: "18:30", title: "🍽️ 新村奶油燉排骨 (Sosinesso)", desc: "享用超人氣濃郁奶油燉排骨！" },
-                            { time: "21:30", title: "🧇 와플대학 鬆餅 & 60雞炸雞宵夜", desc: "外賣品嚐招牌辣椒炸雞與平價鬆餅。" }
+                            { id: "m1-1", time: "08:55", title: "香港起飛 (HX628)", desc: "搭乘 HX628 飛往首爾仁川機場。" },
+                            { id: "m1-2", time: "13:30", title: "抵達仁川國際機場 (ICN)", desc: "辦理入境、提取行李，前往酒店 Check-in。" },
+                            { id: "m1-3", time: "16:00", title: "🛍️ 延南洞 & Modern House 家居雜貨", desc: "逛 <b>오월상점</b> 雜貨、<b>Modern House</b> 大型家居選品館，享用 <b>CHU PLUS</b> 炸吉拿棒。" },
+                            { id: "m1-4", time: "18:30", title: "🍽️ 新村奶油燉排骨 (Sosinesso)", desc: "享用超人氣濃郁奶油燉排骨！" },
+                            { id: "m1-5", time: "21:30", title: "🧇 와플대학 鬆餅 & 60雞炸雞宵夜", desc: "外賣品嚐招牌辣椒炸雞與平價鬆餅。" }
                         ]
                     },
                     {
@@ -588,11 +615,11 @@
                         date: "11月2日 (一)",
                         title: "🍁 和談林賞楓 ➔ 廣藏市場/鍾路 ➔ 明洞 ➔ 東大門",
                         items: [
-                            { time: "09:30", title: "朝早 Brunch 享用", desc: "享用韓式精緻早午餐。" },
-                            { time: "12:00", title: "前往昆池岩和談林", desc: "搭車前往昆池岩和談林。" },
-                            { time: "15:00", title: "🍁 和談林賞楓 (15:00 入場)", desc: "觀賞紅葉與搭乘單軌列車。" },
-                            { time: "18:30", title: "🧵 廣藏市場 128號/156號棉被 & nutceramic", desc: "選購優質韓國傳統棉被，並逛鍾路區質感陶瓷選品店 <b>nutceramic</b>！" },
-                            { time: "20:00", title: "明洞夜市 & Creamchic 甜點 Cafe", desc: "體驗熱鬧夜市與 <b>Creamchic (@creamchic_seoul)</b> 質感法式甜點。" }
+                            { id: "m2-1", time: "09:30", title: "朝早 Brunch 享用", desc: "享用韓式精緻早午餐。" },
+                            { id: "m2-2", time: "12:00", title: "前往昆池岩和談林", desc: "搭車前往昆池岩和談林。" },
+                            { id: "m2-3", time: "15:00", title: "🍁 和談林賞楓 (15:00 入場)", desc: "觀賞紅葉與搭乘單軌列車。" },
+                            { id: "m2-4", time: "18:30", title: "🧵 廣藏市場 128號/156號棉被 & nutceramic", desc: "選購優質韓國傳統棉被，並逛鍾路區質感陶瓷選品店 <b>nutceramic</b>！" },
+                            { id: "m2-5", time: "20:00", title: "明洞夜市 & Creamchic 甜點 Cafe", desc: "體驗熱鬧夜市與 <b>Creamchic (@creamchic_seoul)</b> 質感法式甜點。" }
                         ]
                     },
                     {
@@ -600,9 +627,9 @@
                         date: "11月3日 (二)",
                         title: "聖水洞潮流地圖 (Pola + LOWIDE + NOS + Folnua)",
                         items: [
-                            { time: "11:00", title: "🛍️ 聖水洞 Pola at home, OOTJ & NOS Seongsu", desc: "選購韓系陶瓷餐具、OOTJ 牛仔褲與 <b>NOS Seongsu</b> 潮流選品展演空間。" },
-                            { time: "12:30", title: "🍕 horno Pizza / bd버거 / SSOC 午餐", desc: "品嚐聖水洞精緻手工 Pizza 或美式漢堡。" },
-                            { time: "14:00", title: "☕ LOWIDE Bakery Cafe (@lowide.seoul)", desc: "打卡聖水洞人氣 <b>LOWIDE</b> 享用爆款鹽可頌、貝果與精品咖啡！" }
+                            { id: "m3-1", time: "11:00", title: "🛍️ 聖水洞 Pola at home, OOTJ & NOS Seongsu", desc: "選購韓系陶瓷餐具、OOTJ 牛仔褲與 <b>NOS Seongsu</b> 潮流選品展演空間。" },
+                            { id: "m3-2", time: "12:30", title: "🍕 horno Pizza / bd버거 / SSOC 午餐", desc: "品嚐聖水洞精緻手工 Pizza 或美式漢堡。" },
+                            { id: "m3-3", time: "14:00", title: "☕ LOWIDE Bakery Cafe (@lowide.seoul)", desc: "打卡聖水洞人氣 <b>LOWIDE</b> 享用爆款鹽可頌、貝果與精品咖啡！" }
                         ]
                     },
                     {
@@ -610,9 +637,9 @@
                         date: "11月4日 (三)",
                         title: "景福宮韓服 & 三清洞安國 ➔ 合井 O Bagel House",
                         items: [
-                            { time: "10:00", title: "景福宮賞楓 & 韓服體驗", desc: "穿著韓國傳統韓服在古宮紅葉下打卡拍照。" },
-                            { time: "13:00", title: "土俗村參雞湯", desc: "品嚐首爾最受歡迎的濃郁人蔘雞湯。" },
-                            { time: "15:30", title: "📌 O Bagel House (오베이글 하우스)", desc: "前往合井洞打卡超高人氣質感貝果專賣店！", transport: "📍 麻浦區合井洞 431-21 (10:00-19:00)" }
+                            { id: "m4-1", time: "10:00", title: "景福宮賞楓 & 韓服體驗", desc: "穿著韓國傳統韓服在古宮紅葉下打卡拍照。" },
+                            { id: "m4-2", time: "13:00", title: "土俗村參雞湯", desc: "品嚐首爾最受歡迎的濃郁人蔘雞湯。" },
+                            { id: "m4-3", time: "15:30", title: "📌 O Bagel House (오베이글 하우스)", desc: "前往合井洞打卡超高人氣質感貝果專賣店！", transport: "📍 麻浦區合井洞 431-21 (10:00-19:00)" }
                         ]
                     },
                     {
@@ -620,10 +647,10 @@
                         date: "11月5日 (四)",
                         title: "🔥 江南 chizn.kr 必去！➔ 現代百貨 & 星空圖書館",
                         items: [
-                            { time: "11:00", title: "🔥 chizn.kr (Gangnam - MUST GO!)", desc: "江南超級打卡地標與火爆特色必去店！", highlight: "🌟 MUST GO 必去亮點！" },
-                            { time: "13:30", title: "📍 투아투아 (Tour a Tour) 新沙洞 Brunch", desc: "新沙洞極具質感的 Sourdough 酸麵包早午餐店！", transport: "📍 江南區新沙洞 642-15" },
-                            { time: "16:00", title: "COEX 星空圖書館 (Starfield Library)", desc: "打卡宏偉的巨型書架與地下商圈。" },
-                            { time: "19:00", title: "首爾塔夜景", desc: "乘搭纜車登上 N 首爾塔觀賞首爾璀璨夜景。" }
+                            { id: "m5-1", time: "11:00", title: "🔥 chizn.kr (Gangnam - MUST GO!)", desc: "江南超級打卡地標與火爆特色必去店！", highlight: "🌟 MUST GO 必去亮點！" },
+                            { id: "m5-2", time: "13:30", title: "📍 투아투아 (Tour a Tour) 新沙洞 Brunch", desc: "新沙洞極具質感的 Sourdough 酸麵包早午餐店！", transport: "📍 江南區新沙洞 642-15" },
+                            { id: "m5-3", time: "16:00", title: "COEX 星空圖書館 (Starfield Library)", desc: "打卡宏偉的巨型書架與地下商圈。" },
+                            { id: "m5-4", time: "19:00", title: "首爾塔夜景", desc: "乘搭纜車登上 N 首爾塔觀賞首爾璀璨夜景。" }
                         ]
                     },
                     {
@@ -631,9 +658,9 @@
                         date: "11月6日 (五)",
                         title: "漢南洞 AVEK CHERI ➔ 樂天超市採購",
                         items: [
-                            { time: "10:30", title: "☕ AVEK CHERI 아벡쉐리 (Hannam)", desc: "漫步漢南洞質感街道，享用浪漫法式烘焙 Cafe。" },
-                            { time: "14:00", title: "首爾站樂天超市 (Lotte Mart)", desc: "採購韓國零食、紫菜、拉麵與伴手禮 (提供現場打包服務)。" },
-                            { time: "18:00", title: "明洞樂天百貨 & 精緻韓式燒肉", desc: "最後補貨與享用豐盛燒肉晚宴。" }
+                            { id: "m6-1", time: "10:30", title: "☕ AVEK CHERI 아벡쉐리 (Hannam)", desc: "漫步漢南洞質感街道，享用浪漫法式烘焙 Cafe。" },
+                            { id: "m6-2", time: "14:00", title: "首爾站樂天超市 (Lotte Mart)", desc: "採購韓國零食、紫菜、拉麵與伴手禮 (提供現場打包服務)。" },
+                            { id: "m6-3", time: "18:00", title: "明洞樂天百貨 & 精緻韓式燒肉", desc: "最後補貨與享用豐盛燒肉晚宴。" }
                         ]
                     },
                     {
@@ -641,14 +668,66 @@
                         date: "11月7日 (六)",
                         title: "輕鬆退房 & 返港",
                         items: [
-                            { time: "08:30", title: "酒店 Check-out & 前往機場", desc: "乘搭機場巴士或 AREX 前往仁川機場。" },
-                            { time: "12:00", title: "乘搭 HX629 返港", desc: "滿載而歸，順利返抵香港！" }
+                            { id: "m7-1", time: "08:30", title: "酒店 Check-out & 前往機場", desc: "乘搭機場巴士或 AREX 前往仁川機場。" },
+                            { id: "m7-2", time: "12:00", title: "乘搭 HX629 返港", desc: "滿載而歸，順利返抵香港！" }
                         ]
                     }
                 ]
             }
         };
 
+        const categoriesData = [
+            {
+                category: "☕ Cafe & 甜品烘焙",
+                items: [
+                    { name: "LOWIDE Coffee Bakery (@lowide.seoul)", loc: "聖水洞", desc: "招牌鹽可頌 (Salt Bread) 與爆款貝果，聖水洞超高人氣 Bakery Cafe！" },
+                    { name: "Creamchic (@creamchic_seoul)", loc: "明洞", desc: "極具法式浪漫風格的質感烘焙甜點 Cafe。" },
+                    { name: "클래식 해례커피 (Haerye Coffee)", loc: "聖水洞 (연무장길 28-20)", desc: "傳統韓式特調與極致質感的自烘咖啡館。" },
+                    { name: "beekend.seoul", loc: "弘大/延南洞", desc: "超火爆的杜拜法式吐司 (Dubai French Toast)！" },
+                    { name: "CHU PLUS (츄플러스)", loc: "延南洞", desc: "現點現炸、外酥內軟的極品吉拿棒 (Churros)。" },
+                    { name: "O Bagel House (오베이글 하우스)", loc: "合井洞 (431-21)", desc: "人氣質感貝果專賣店，多種口味抹醬 (10:00-19:00)。" },
+                    { name: "Haz Bakery", loc: "聖水洞 (二街 316-46)", desc: "極致厚實餡料夾心貝果，拍照與口感兼具！" },
+                    { name: "할매기름집 (Grandma Oil Shop)", loc: "聖水洞", desc: "傳統韓式煎餅與香濃冰淇淋甜品店。" },
+                    { name: "투아투아 (Tour a Tour)", loc: "江南新沙洞 (642-15)", desc: "主打 Sourdough 酸麵包的法式質感 Brunch。" },
+                    { name: "AVEK CHERI (아벡쉐리)", loc: "漢南洞", desc: "漢南洞經典法式烘焙甜點與精品咖啡店。" },
+                    { name: "와플대학 (Waffle College)", loc: "弘大/各分店", desc: "韓國經典連鎖平價鮮奶油水果鬆餅。" }
+                ]
+            },
+            {
+                category: "🛍️ 潮流服飾 & 女裝/男裝選品",
+                items: [
+                    { name: "Folnua (폴느아)", loc: "聖水洞旗艦店", desc: "韓國極受歡迎的設計師質感皮革包款與時尚單品。" },
+                    { name: "OOTJ Seongsu Branch", loc: "聖水洞", desc: "韓國高質感版型牛仔褲專賣店。" },
+                    { name: "NOS Seongsu (@nos_seongsu)", loc: "聖水洞", desc: "聖水洞前衛時尚選品展演空間與服飾品牌。" },
+                    { name: "오월상점 (May Store)", loc: "延南洞", desc: "溫馨可愛的文具選品、飾品與小物店。" },
+                    { name: "廣藏市場二樓潮街 (Vintage Area)", loc: "廣藏市場", desc: "首爾挖寶必去的美式/日系古著潮牌街區。" }
+                ]
+            },
+            {
+                category: "🏠 質感家品 & 陶瓷生活選品",
+                items: [
+                    { name: "Pola at home (폴라아ット홈)", loc: "聖水洞", desc: "超可愛韓系質感陶瓷餐具、碗盤與居家雜貨。" },
+                    { name: "nutceramic_누트세라믹", loc: "鍾路區 (Jongno 1)", desc: "設計感極強的手作陶瓷器具與生活選品。" },
+                    { name: "Modern House (모던하우스)", loc: "弘大/各大百貨", desc: "韓國國民大型生活家居用品與佈置用品連鎖店。" },
+                    { name: "廣藏市場 128號 & 156號棉被店", loc: "廣藏市場", desc: "首爾採購輕盈、保暖、可機洗韓國傳統棉被必去名店！" }
+                ]
+            },
+            {
+                category: "🍽️ 必吃餐廳 & 燒肉宵夜",
+                items: [
+                    { name: "chizn.kr (🔥 MUST GO!)", loc: "江南區", desc: "江南超級火爆打卡地標與主題餐廳！" },
+                    { name: "新村奶油燉排骨 (Sosinesso)", loc: "新村/弘大", desc: "香濃滑順、辣度可調的超誘人奶油燉排骨。" },
+                    { name: "풀뜯는돼지 (The Grazing Pig)", loc: "弘大 (12:00-22:00)", desc: "水芹菜香氣搭配香脆五花肉的爆款烤肉店！" },
+                    { name: "우주집 (Woojujip)", loc: "弘大/市廳", desc: "首爾當地人極度推薦的韓式烤牛肉與烤牛小腸。" },
+                    { name: "horno 오르노 (Pizza)", loc: "聖水洞 (10:00-23:00)", desc: "聖水洞氣氛極佳的手工窯烤 Pizza & 意式輕食。" },
+                    { name: "bd버거 (bd burger)", loc: "聖水洞", desc: "聖水洞超火爆厚切蝦餅與牛肉美式漢堡。" },
+                    { name: "聖水洞 SSOC", loc: "聖水洞", desc: "氣氛浪漫、餐點精緻的意式小酒館 (Bistro)。" },
+                    { name: "60雞炸雞 (60계치킨)", loc: "明洞/東大門/外賣", desc: "每日換新油炸 60 隻！必點招牌辣椒炸雞 (Gochu Chicken)。" }
+                ]
+            }
+        ];
+
+        let tripData = JSON.parse(localStorage.getItem('seoul_custom_itinerary')) || initialTripData;
         let currentTab = 'oscar';
         let currentDayIndex = 0;
 
@@ -663,17 +742,26 @@
             
             document.getElementById('btn-oscar').classList.toggle('active', tab === 'oscar');
             document.getElementById('btn-mum').classList.toggle('active', tab === 'mum');
+            document.getElementById('btn-category').classList.toggle('active', tab === 'category');
             document.getElementById('btn-weather').classList.toggle('active', tab === 'weather');
 
             const mainView = document.getElementById('main-itinerary-view');
+            const categoryView = document.getElementById('category-view');
             const weatherView = document.getElementById('weather-view');
 
-            if (tab === 'weather') {
+            if (tab === 'category') {
                 mainView.style.display = 'none';
+                categoryView.style.display = 'block';
+                weatherView.style.display = 'none';
+                renderCategoryView();
+            } else if (tab === 'weather') {
+                mainView.style.display = 'none';
+                categoryView.style.display = 'none';
                 weatherView.style.display = 'block';
                 fetchLiveSeoulWeather();
             } else {
                 mainView.style.display = 'block';
+                categoryView.style.display = 'none';
                 weatherView.style.display = 'none';
                 currentDayIndex = 0;
                 renderTravelerInfo();
@@ -720,15 +808,18 @@
         function renderDayTimeline() {
             const dayData = tripData[currentTab].days[currentDayIndex];
             document.getElementById('current-day-title').innerText = `📅 DAY ${dayData.dayNum} · ${dayData.date}`;
-            document.getElementById('current-day-tag').innerText = dayData.title;
 
             const container = document.getElementById('timeline-container');
             container.innerHTML = '';
 
-            dayData.items.forEach(item => {
+            dayData.items.forEach((item, index) => {
                 const itemEl = document.createElement('div');
                 itemEl.className = 'timeline-item';
+                itemEl.setAttribute('draggable', 'true');
+                itemEl.dataset.index = index;
+
                 itemEl.innerHTML = `
+                    <div class="drag-handle">☰</div>
                     <span class="time-badge">⏰ ${item.time}</span>
                     <div class="item-title">${item.title}</div>
                     <div class="item-desc">${item.desc}</div>
@@ -738,7 +829,96 @@
                 container.appendChild(itemEl);
             });
 
+            enableDragAndDrop();
             loadRemarks();
+        }
+
+        // 🌟 啟用拖拽 (Drag and Drop) 與自動排序儲存
+        function enableDragAndDrop() {
+            const container = document.getElementById('timeline-container');
+            const items = container.querySelectorAll('.timeline-item');
+            let draggedItem = null;
+
+            items.forEach(item => {
+                item.addEventListener('dragstart', function (e) {
+                    draggedItem = this;
+                    setTimeout(() => this.classList.add('dragging'), 0);
+                });
+
+                item.addEventListener('dragend', function () {
+                    this.classList.remove('dragging');
+                    draggedItem = null;
+                    saveCurrentDayOrder();
+                });
+
+                item.addEventListener('dragover', function (e) {
+                    e.preventDefault();
+                    const afterElement = getDragAfterElement(container, e.clientY);
+                    if (afterElement == null) {
+                        container.appendChild(draggedItem);
+                    } else {
+                        container.insertBefore(draggedItem, afterElement);
+                    }
+                });
+            });
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.timeline-item:not(.dragging)')];
+
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function saveCurrentDayOrder() {
+            const container = document.getElementById('timeline-container');
+            const itemElements = container.querySelectorAll('.timeline-item');
+            const currentItems = tripData[currentTab].days[currentDayIndex].items;
+            const newItemsOrder = [];
+
+            itemElements.forEach(el => {
+                const oldIndex = parseInt(el.dataset.index);
+                newItemsOrder.push(currentItems[oldIndex]);
+            });
+
+            // 更新數據結構
+            tripData[currentTab].days[currentDayIndex].items = newItemsOrder;
+            localStorage.setItem('seoul_custom_itinerary', JSON.stringify(tripData));
+
+            // 重新渲染附帶正確索引
+            renderDayTimeline();
+        }
+
+        function renderCategoryView() {
+            const container = document.getElementById('category-list-container');
+            container.innerHTML = '';
+
+            categoriesData.forEach(cat => {
+                const catHeader = document.createElement('div');
+                catHeader.style.cssText = "font-size: 0.95rem; font-weight: 900; margin: 14px 0 8px 0; color: var(--coral-red); border-left: 4px solid var(--coral-red); padding-left: 8px;";
+                catHeader.innerText = cat.category;
+                container.appendChild(catHeader);
+
+                cat.items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'timeline-item';
+                    card.style.paddingLeft = '12px';
+                    card.style.marginBottom = '8px';
+                    card.innerHTML = `
+                        <span class="cat-tag">📍 ${item.loc}</span>
+                        <div class="item-title">${item.name}</div>
+                        <div class="item-desc">${item.desc}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
         }
 
         function copyHotelAddress() {
