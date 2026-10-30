@@ -299,7 +299,7 @@
             outline: none;
             resize: none;
             line-height: 1.4;
-            height: 48px;
+            height: 65px;
         }
 
         .editable-desc:focus {
@@ -664,9 +664,9 @@
                         title: "🍁 和談林賞楓 ➔ 廣藏市場/鍾路 ➔ 明洞 ➔ 東大門",
                         items: [
                             { time: "09:30", title: "🥐 朝早輕鬆 Brunch", desc: "酒店附近享用美味韓式咖啡與烘焙早午餐。" },
-                            { time: "12:00", title: "🚌 出發前往昆池岩和談林", desc: "搭地鐵京江線至昆池岩站，轉乘計程車/接駁車至和談林入口（車程預計 1.5–2 小時）。" },
-                            { time: "15:00", title: "🍁 和談林 (Hwadam Botanic Garden) 賞楓", desc: "賞楓核心時間！乘搭單軌列車，漫步滿山紅葉木棧道公園。" },
-                            { time: "17:00", title: "🚌 返回首爾市區", desc: "搭車返回首爾市區廣藏市場/鍾路區。" },
+                            { time: "12:00", title: "🚌 出發前往昆池岩和談林", desc: "【交通指南】地鐵搭至「板橋站」轉京江線至「昆池岩站」1號出口，轉的士12-15分鐘即達(約10,000-12,000韓元)。全的的士(Kakao T/Uber)單省約45,000-65,000韓元(1.2-1.5小時)。" },
+                            { time: "15:00", title: "🍁 和談林 (Hwadam Botanic Garden) 賞楓", desc: "賞楓核心時間！乘搭單軌列車，漫步滿山紅葉木棧道公園。(預先準備好 15:00 入場 QR Code)" },
+                            { time: "17:00", title: "🚌 返程首爾市區 (交通小TIPS)", desc: "【回程小TIPS】門口現場的士數量較少，離開前建議提早15分鐘用 Kakao T App 叫車返回昆池岩站，再轉地鐵回市區；或請遊客中心協助叫車。" },
                             { time: "18:30", title: "🧵 廣藏市場 (棉被街 128號/156號) & nutceramic", desc: "直奔 128號、156號棉被店採購棉被；順道造訪鍾路區質感陶瓷選品店 nutceramic_누트세라믹！" },
                             { time: "20:00", title: "🛍️ 明洞商圈夜遊 & Creamchic 甜點 Cafe", desc: "逛明洞夜市小吃、樂天百貨，打卡質感法式甜點 Cafe Creamchic (@creamchic_seoul)！" },
                             { time: "22:00", title: "🌙 東大門 DDP & 現代 Outlet 購物", desc: "深夜東大門批發商圈與 DDP 建築夜景巡禮。" }
@@ -714,8 +714,9 @@
                         title: "🍁 和談林賞楓 ➔ 廣藏市場/鍾路 ➔ 明洞 ➔ 東大門",
                         items: [
                             { time: "09:30", title: "朝早 Brunch 享用", desc: "享用韓式精緻早午餐。" },
-                            { time: "12:00", title: "前往昆池岩和談林", desc: "搭車前往昆池岩和談林。" },
+                            { time: "12:00", title: "前往昆池岩和談林 (交通詳情)", desc: "【去程】地鐵至板橋站轉京江線至昆池岩站1號出口，轉的士12-15分鐘(約11,000韓元)。全程Uber約5萬韓元。" },
                             { time: "15:00", title: "🍁 和談林賞楓 (15:00 入場)", desc: "觀賞紅葉與搭乘單軌列車。" },
+                            { time: "17:00", title: "🚌 返程交通小TIPS", desc: "【回程】離開時提前用 Kakao T App 叫的士回昆池岩站，再搭地鐵返市區。" },
                             { time: "18:30", title: "🧵 廣藏市場 128號/156號棉被 & nutceramic", desc: "選購優質韓國傳統棉被，並逛鍾路區質感陶瓷選品店 nutceramic！" },
                             { time: "20:00", title: "明洞夜市 & Creamchic 甜點 Cafe", desc: "體驗熱鬧夜市與 Creamchic (@creamchic_seoul) 質感法式甜點。" }
                         ]
@@ -774,7 +775,6 @@
             }
         };
 
-        // 📍 純地區分類資料庫（含 Open/Close Hours 與直接外連 Redirect 連結）
         const areaCategorizedData = [
             {
                 areaName: "🛍️ 弘大 / 延南洞 / 望遠 / 合井 / 新村",
@@ -1065,7 +1065,6 @@
             renderDayTimeline();
         }
 
-        // 📍 渲染純地區分類檢索（含營業時間與直接外連 Redirect）
         function renderAreaCategoryView() {
             const container = document.getElementById('area-list-container');
             container.innerHTML = '';
