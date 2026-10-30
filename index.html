@@ -73,7 +73,8 @@
         }
 
         .traveler-selector {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             background: #EFECE6;
             border: 2px solid var(--border-color);
             border-radius: 14px;
@@ -83,16 +84,16 @@
         }
 
         .tab-btn {
-            flex: 1;
             padding: 8px 4px;
             border: none;
             border-radius: 10px;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.2s ease;
             color: #666;
             background: transparent;
+            text-align: center;
         }
 
         .tab-btn.active {
@@ -278,6 +279,18 @@
             margin-top: 4px;
         }
 
+        .cat-tag {
+            display: inline-block;
+            background: #F4EFEB;
+            color: #8C6D53;
+            border: 1px solid #D1C2B4;
+            border-radius: 6px;
+            padding: 2px 6px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
         .remarks-section {
             margin-top: 16px;
             background: var(--yamabuki-soft);
@@ -428,6 +441,7 @@
         <div class="traveler-selector">
             <button class="tab-btn active" id="btn-oscar" onclick="switchTab('oscar')">Oscar (11/1-11/4)</button>
             <button class="tab-btn" id="btn-mum" onclick="switchTab('mum')">Nic & Mum (11/1-11/7)</button>
+            <button class="tab-btn" id="btn-category" onclick="switchTab('category')">🗂️ 店家/景點分類</button>
             <button class="tab-btn" id="btn-weather" onclick="switchTab('weather')">☀️ 實時氣候</button>
         </div>
     </header>
@@ -481,6 +495,17 @@
         </div>
     </div>
 
+    <!-- 🌟 新增：全景點與店家分類檢索 Tab -->
+    <div id="category-view" style="display: none;">
+        <div class="info-card">
+            <div class="card-header">
+                <span>🗂️ 首爾精選店家/餐廳分類清單</span>
+                <span class="hotel-tag">清單總覽</span>
+            </div>
+            <div id="category-list-container"></div>
+        </div>
+    </div>
+
     <!-- 自動 API 抓取之實時天氣頁面 -->
     <div id="weather-view" style="display: none;">
         <div class="weather-current-card">
@@ -527,7 +552,7 @@
                             { time: "08:55", title: "香港起飛 (HX628)", desc: "搭乘香港航空 HX628 飛往首爾仁川機場。" },
                             { time: "13:30", title: "抵達仁川國際機場 (ICN)", desc: "辦理入境、提取行李，搭乘 AREX 直通列車往市區。" },
                             { time: "15:00", title: "Layer Hostel Check-in", desc: "辦理入住與寄放行李（與 Nic & Mum 酒店鄰近）。" },
-                            { time: "16:00", title: "🛍️ 延南洞 & 弘大選品家居地圖", desc: "逛延南洞雜貨 <b>오월상점</b>、<b>Modern House (모던하우스)</b> 家居生活館，享用 <b>CHU PLUS</b> 炸吉拿棒、<b>beekend.seoul</b> 杜拜吐司！", transport: "🚇 地鐵 2號線 弘大入口站 3號出口" },
+                            { time: "16:00", title: "🛍️ 延南洞 & 弘大選品家居地圖", desc: "逛延南洞雜貨 <b>오월상점</b>、<b>Modern House</b> 家居生活館，享用 <b>CHU PLUS</b> 炸吉拿棒、<b>beekend.seoul</b> 杜拜吐司！", transport: "🚇 地鐵 2號線 弘大入口站 3號出口" },
                             { time: "18:30", title: "🍽️ 新村奶油燉排骨 (Sosinesso)", desc: "首爾超人氣濃郁奶油燉排骨！香濃滑順，配飯極致美味！" },
                             { time: "20:30", title: "🍽️ 풀뜯는돼지 (水芹菜烤肉) / 우주집 (Woojujip)", desc: "續攤/備選：弘大水芹菜五花肉或韓式烤肉晚宴！" },
                             { time: "22:00", title: "🧇 와플대학 鬆餅 & 60雞炸雞宵夜", desc: "外帶韓國經典平價鬆餅與 60雞招牌辣椒炸雞 (Gochu Chicken) 回酒店當宵夜！" }
@@ -610,7 +635,7 @@
                         date: "11月4日 (三)",
                         title: "景福宮韓服 & 三清洞安國 ➔ 合井 O Bagel House",
                         items: [
-                            { time: "10:00", title: "景福宮賞楓 & 韓服體驗", desc: "穿著韓國傳統韓服在古宮紅葉下打卡拍照。" },
+                            { time: "10:00", title: "景福宫賞楓 & 韓服體驗", desc: "穿著韓國傳統韓服在古宮紅葉下打卡拍照。" },
                             { time: "13:00", title: "土俗村參雞湯", desc: "品嚐首爾最受歡迎的濃郁人蔘雞湯。" },
                             { time: "15:30", title: "📌 O Bagel House (오베이글 하우스)", desc: "前往合井洞打卡超高人氣質感貝果專賣店！", transport: "📍 麻浦區合井洞 431-21 (10:00-19:00)" }
                         ]
@@ -649,6 +674,58 @@
             }
         };
 
+        // 🌟 分類地點資料庫 (Cafe, 女裝/男裝選品, 家品, 餐廳)
+        const categoriesData = [
+            {
+                category: "☕ Cafe & 甜品烘焙",
+                items: [
+                    { name: "LOWIDE Coffee Bakery (@lowide.seoul)", loc: "聖水洞", desc: "招牌鹽可頌 (Salt Bread) 與爆款貝果，聖水洞超高人氣 Bakery Cafe！" },
+                    { name: "Creamchic (@creamchic_seoul)", loc: "明洞", desc: "極具法式浪漫風格的質感烘焙甜點 Cafe。" },
+                    { name: "클래식 해례커피 (Haerye Coffee)", loc: "聖水洞 (연무장길 28-20)", desc: "傳統韓式特調與極致質感的自烘咖啡館。" },
+                    { name: "beekend.seoul", loc: "弘大/延南洞", desc: "超火爆的杜拜法式吐司 (Dubai French Toast)！" },
+                    { name: "CHU PLUS (츄플러스)", loc: "延南洞", desc: "現點現炸、外酥內軟的極品吉拿棒 (Churros)。" },
+                    { name: "O Bagel House (오베이글 하우스)", loc: "合井洞 (431-21)", desc: "人氣質感貝果專賣店，多種口味抹醬 (10:00-19:00)。" },
+                    { name: "Haz Bakery", loc: "聖水洞 (二街 316-46)", desc: "極致厚實餡料夾心貝果，拍照與口感兼具！" },
+                    { name: "할매기름집 (Grandma Oil Shop)", loc: "聖水洞", desc: "傳統韓式煎餅與香濃冰淇淋甜品店。" },
+                    { name: "투아투아 (Tour a Tour)", loc: "江南新沙洞 (642-15)", desc: "主打 Sourdough 酸麵包的法式質感 Brunch。" },
+                    { name: "AVEK CHERI (아벡쉐리)", loc: "漢南洞", desc: "漢南洞經典法式烘焙甜點與精品咖啡店。" },
+                    { name: "와플대학 (Waffle College)", loc: "弘大/各分店", desc: "韓國經典連鎖平價鮮奶油水果鬆餅。" }
+                ]
+            },
+            {
+                category: "🛍️ 潮流服飾 & 女裝/男裝選品",
+                items: [
+                    { name: "Folnua (폴느아)", loc: "聖水洞旗艦店", desc: "韓國極受歡迎的設計師質感皮革包款與時尚單品。" },
+                    { name: "OOTJ Seongsu Branch", loc: "聖水洞", desc: "韓國高質感版型牛仔褲專賣店。" },
+                    { name: "NOS Seongsu (@nos_seongsu)", loc: "聖水洞", desc: "聖水洞前衛時尚選品展演空間與服飾品牌。" },
+                    { name: "오월상점 (May Store)", loc: "延南洞", desc: "溫馨可愛的文具選品、飾品與小物店。" },
+                    { name: "廣藏市場二樓潮街 (Vintage Area)", loc: "廣藏市場", desc: "首爾挖寶必去的美式/日系古著潮牌街區。" }
+                ]
+            },
+            {
+                category: "🏠 質感家品 & 陶瓷生活選品",
+                items: [
+                    { name: "Pola at home (폴라아ット홈)", loc: "聖水洞", desc: "超可愛韓系質感陶瓷餐具、碗盤與居家雜貨。" },
+                    { name: "nutceramic_누트세라믹", loc: "鍾路區 (Jongno 1)", desc: "設計感極強的手作陶瓷器具與生活選品。" },
+                    { name: "Modern House (모던하우스)", loc: "弘大/各大百貨", desc: "韓國國民大型生活家居用品與佈置用品連鎖店。" },
+                    { name: "廣藏市場 128號 & 156號棉被店", loc: "廣藏市場", desc: "首爾採購輕盈、保暖、可機洗韓國傳統棉被必去名店！" }
+                ]
+            },
+            {
+                category: "🍽️ 必吃餐廳 & 燒肉宵夜",
+                items: [
+                    { name: "chizn.kr (🔥 MUST GO!)", loc: "江南區", desc: "江南超級火爆打卡地標與主題餐廳！" },
+                    { name: "新村奶油燉排骨 (Sosinesso)", loc: "新村/弘大", desc: "香濃滑順、辣度可調的超誘人奶油燉排骨。" },
+                    { name: "풀뜯는돼지 (The Grazing Pig)", loc: "弘大 (12:00-22:00)", desc: "水芹菜香氣搭配香脆五花肉的爆款烤肉店！" },
+                    { name: "우주집 (Woojujip)", loc: "弘大/市廳", desc: "首爾當地人極度推薦的韓式烤牛肉與烤牛小腸。" },
+                    { name: "horno 오르노 (Pizza)", loc: "聖水洞 (10:00-23:00)", desc: "聖水洞氣氛極佳的手工窯烤 Pizza & 意式輕食。" },
+                    { name: "bd버거 (bd burger)", loc: "聖水洞", desc: "聖水洞超火爆厚切蝦餅與牛肉美式漢堡。" },
+                    { name: "聖水洞 SSOC", loc: "聖水洞", desc: "氣氛浪漫、餐點精緻的意式小酒館 (Bistro)。" },
+                    { name: "60雞炸雞 (60계치킨)", loc: "明洞/東大門/外賣", desc: "每日換新油炸 60 隻！必點招牌辣椒炸雞 (Gochu Chicken)。" }
+                ]
+            }
+        ];
+
         let currentTab = 'oscar';
         let currentDayIndex = 0;
 
@@ -663,17 +740,26 @@
             
             document.getElementById('btn-oscar').classList.toggle('active', tab === 'oscar');
             document.getElementById('btn-mum').classList.toggle('active', tab === 'mum');
+            document.getElementById('btn-category').classList.toggle('active', tab === 'category');
             document.getElementById('btn-weather').classList.toggle('active', tab === 'weather');
 
             const mainView = document.getElementById('main-itinerary-view');
+            const categoryView = document.getElementById('category-view');
             const weatherView = document.getElementById('weather-view');
 
-            if (tab === 'weather') {
+            if (tab === 'category') {
                 mainView.style.display = 'none';
+                categoryView.style.display = 'block';
+                weatherView.style.display = 'none';
+                renderCategoryView();
+            } else if (tab === 'weather') {
+                mainView.style.display = 'none';
+                categoryView.style.display = 'none';
                 weatherView.style.display = 'block';
                 fetchLiveSeoulWeather();
             } else {
                 mainView.style.display = 'block';
+                categoryView.style.display = 'none';
                 weatherView.style.display = 'none';
                 currentDayIndex = 0;
                 renderTravelerInfo();
@@ -739,6 +825,31 @@
             });
 
             loadRemarks();
+        }
+
+        // 🌟 渲染景點/店家分類 Tab
+        function renderCategoryView() {
+            const container = document.getElementById('category-list-container');
+            container.innerHTML = '';
+
+            categoriesData.forEach(cat => {
+                const catHeader = document.createElement('div');
+                catHeader.style.cssText = "font-size: 0.95rem; font-weight: 900; margin: 14px 0 8px 0; color: var(--coral-red); border-left: 4px solid var(--coral-red); padding-left: 8px;";
+                catHeader.innerText = cat.category;
+                container.appendChild(catHeader);
+
+                cat.items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'timeline-item';
+                    card.style.marginBottom = '8px';
+                    card.innerHTML = `
+                        <span class="cat-tag">📍 ${item.loc}</span>
+                        <div class="item-title">${item.name}</div>
+                        <div class="item-desc">${item.desc}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
         }
 
         function copyHotelAddress() {
